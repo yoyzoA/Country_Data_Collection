@@ -94,7 +94,7 @@ class CountrySpider(scrapy.Spider):
         # Remove CSS rules that leak in as text
         text = re.sub(r"\.mw-parser-output[^}]+\}", "", text)
         # Remove footnote references like [3], [a], [ 3 ], [ a ]
-        text = re.sub(r"\[\s*\w+\s*\]", "", text)
+        text = re.sub(r"\[\s*[^\]]+\s*\]", "", text)
         # Remove coordinate text
         text = re.sub(r"\d+°\d+[′']\s*[NSEW].*", "", text)
         # Remove leftover CSS class names
