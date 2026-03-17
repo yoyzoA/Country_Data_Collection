@@ -13,7 +13,7 @@ To enable, add to settings.py:
 
 import json
 import os
-from tree_builder import build_tree, build_all_trees
+from .tree_builder import build_tree, build_all_trees
 
 
 class TreeBuilderPipeline:
