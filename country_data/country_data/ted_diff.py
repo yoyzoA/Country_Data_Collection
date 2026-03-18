@@ -33,11 +33,12 @@ def load_tree_by_country(json_path: str, country_name: str) -> TreeNode:
 def subtree_to_dict(node: TreeNode) -> Dict[str, Any]:
     """
     Convert a TreeNode subtree back into a plain dictionary.
-    Useful for storing insert operations later.
+    Used to embed full subtree snapshots in insert/delete operations,
+    which is what the patcher needs to reconstruct or remove nodes.
     """
     result = {
         "label": node.label,
-        "type": node.node_type
+        "type": node.node_type,
     }
     if node.children:
         result["children"] = [subtree_to_dict(child) for child in node.children]
@@ -46,17 +47,27 @@ def subtree_to_dict(node: TreeNode) -> Dict[str, Any]:
 
 def flatten_tree_preorder(root: TreeNode) -> List[Dict[str, Any]]:
     """
-    Chawathe-style flattening:
-    preorder traversal, recording a sequence of LD-like entries.
+    Chawathe-style flattening: preorder traversal, producing a sequence of
+    LD-like entries.
 
-    We keep more than (label, depth) because:
-    - node_type helps us distinguish structure vs content
-    - path / parent_path / position will help later for patching
-    - subtree snapshot helps later for insert operations
+    Each entry contains:
+      - label      : node label (key name, token value, etc.)
+      - node_type  : "root" | "element" | "attribute" | "token"
+      - depth      : tree depth (used only for the LD-pair, not matching)
+      - path       : tuple-path from root (used for patcher addressing)
+      - parent_path: path of the parent node (used for insert ops in the patcher)
+      - position   : child index under the parent (used for insert ops)
+      - subtree    : full subtree dict snapshot (used for insert/delete ops)
     """
     seq: List[Dict[str, Any]] = []
 
-    def visit(node: TreeNode, depth: int, path: Tuple[int, ...], parent_path: Tuple[int, ...] | None, position: int | None):
+    def visit(
+        node: TreeNode,
+        depth: int,
+        path: Tuple[int, ...],
+        parent_path: Tuple[int, ...] | None,
+        position: int | None,
+    ):
         seq.append({
             "label": node.label,
             "node_type": node.node_type,
@@ -66,7 +77,6 @@ def flatten_tree_preorder(root: TreeNode) -> List[Dict[str, Any]]:
             "position": position,
             "subtree": subtree_to_dict(node),
         })
-
         for i, child in enumerate(node.children):
             visit(child, depth + 1, path + (i,), path, i)
 
@@ -85,50 +95,49 @@ def delete_cost(_: Dict[str, Any]) -> int:
 
 def update_cost(a: Dict[str, Any], b: Dict[str, Any]) -> int:
     """
-    Cost = 0 if nodes are considered identical, else 1.
+    Cost = 0 if nodes match (same label AND same node type), otherwise 1.
 
-    We compare:
-    - label
-    - node type
-    - depth
+    Design choice:
+      We compare only label and node_type — NOT depth.
 
-    Why depth too?
-    Because Chawathe’s LD-pair uses (label, depth), not just the label.
+      Depth is encoded in the LD-pair sequence to reflect structural position,
+      but it is NOT a property of the node itself.  Including depth in the
+      matching predicate would penalise semantically identical nodes that simply
+      appear at a different level after a structural change, inflating the TED
+      and producing spurious update operations in the edit script.
+      This follows the spirit of Chawathe’s sequence-based comparison, while relaxing 
+      depth as a hard matching constraint. 
     """
-    same_label = a["label"] == b["label"]
-    same_type = a["node_type"] == b["node_type"]
-    same_depth = a["depth"] == b["depth"]
-
-    return 0 if (same_label and same_type and same_depth) else 1
+    return 0 if (a["label"] == b["label"] and a["node_type"] == b["node_type"]) else 1
 
 
 # 4) Dynamic-programming TED over preorder LD-pair sequences
-def compute_ted(seq_a: List[Dict[str, Any]], seq_b: List[Dict[str, Any]]) -> Tuple[List[List[int]], int]:
+def compute_ted(
+    seq_a: List[Dict[str, Any]],
+    seq_b: List[Dict[str, Any]],
+) -> Tuple[List[List[int]], int]:
     """
-    Compute edit distance between two preorder LD-pair sequences.
-    Returns:
-        - full DP matrix
-        - final TED value
-    """
-    n = len(seq_a)
-    m = len(seq_b)
+    Compute edit distance between two preorder LD-pair sequences using the
+    standard sequence-alignment DP over preorder node sequences, 
+    following the spirit of Chawathe’s approach
 
+    Returns:
+        dist  – full (n+1) × (m+1) DP matrix (needed for backtracking)
+        ted   – the final tree edit distance value
+    """
+    n, m = len(seq_a), len(seq_b)
     dist = [[0] * (m + 1) for _ in range(n + 1)]
 
-    # Base cases
     for i in range(1, n + 1):
         dist[i][0] = dist[i - 1][0] + delete_cost(seq_a[i - 1])
-
     for j in range(1, m + 1):
         dist[0][j] = dist[0][j - 1] + insert_cost(seq_b[j - 1])
 
-    # Fill matrix
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             cost_del = dist[i - 1][j] + delete_cost(seq_a[i - 1])
             cost_ins = dist[i][j - 1] + insert_cost(seq_b[j - 1])
             cost_upd = dist[i - 1][j - 1] + update_cost(seq_a[i - 1], seq_b[j - 1])
-
             dist[i][j] = min(cost_del, cost_ins, cost_upd)
 
     return dist, dist[n][m]
@@ -138,17 +147,25 @@ def compute_ted(seq_a: List[Dict[str, Any]], seq_b: List[Dict[str, Any]]) -> Tup
 def backtrack_edit_script(
     seq_a: List[Dict[str, Any]],
     seq_b: List[Dict[str, Any]],
-    dist: List[List[int]]
+    dist: List[List[int]],
 ) -> List[Dict[str, Any]]:
     """
     Recover one minimum-cost edit script by backtracking the DP matrix.
+
+    Operations produced:
+      - "match"  : node in T1 aligns with an identical node in T2 (cost 0)
+      - "update" : node label or type differs between T1 and T2 (cost 1)
+      - "delete" : node in T1 has no counterpart in T2 (cost 1)
+      - "insert" : node in T2 has no counterpart in T1 (cost 1)
+
+    "match" operations are stripped from the final output (they add no
+    information) but are computed internally so the patcher can later
+    reconstruct node-address mappings if needed.
     """
-    i = len(seq_a)
-    j = len(seq_b)
+    i, j = len(seq_a), len(seq_b)
     raw_ops: List[Dict[str, Any]] = []
 
     while i > 0 or j > 0:
-        # Case 1: diagonal move (match or update)
         if i > 0 and j > 0:
             upd_c = update_cost(seq_a[i - 1], seq_b[j - 1])
             if dist[i][j] == dist[i - 1][j - 1] + upd_c:
@@ -176,7 +193,7 @@ def backtrack_edit_script(
                 j -= 1
                 continue
 
-        # Case 2: deletion
+        # ── delete from T1 ─────────────────────────────────────────────────
         if i > 0 and dist[i][j] == dist[i - 1][j] + delete_cost(seq_a[i - 1]):
             raw_ops.append({
                 "op": "delete",
@@ -189,7 +206,7 @@ def backtrack_edit_script(
             i -= 1
             continue
 
-        # Case 3: insertion
+        # ── insert into T2 ─────────────────────────────────────────────────
         if j > 0 and dist[i][j] == dist[i][j - 1] + insert_cost(seq_b[j - 1]):
             raw_ops.append({
                 "op": "insert",
@@ -207,20 +224,21 @@ def backtrack_edit_script(
         raise RuntimeError("Backtracking failed: no valid predecessor found.")
 
     raw_ops.reverse()
-
-    # Remove costless matches from final human-readable diff
-    final_ops = [op for op in raw_ops if op["op"] != "match"]
-    return final_ops
+    # Strip costless matches from the human-readable diff output
+    return [op for op in raw_ops if op["op"] != "match"]
 
 
-
-# 6) Similarity computation + high-level wrapper
+# 6) Similarity computation + high-level wrappers
 def similarity_from_ted(ted: int, len_a: int, len_b: int) -> float:
     """
-    Simple normalized similarity in [0, 1]:
-        sim = 1 - ted / (len_a + len_b)
+    Normalised similarity in [0, 1]:
+        sim = 1 - TED / (|T1| + |T2|)
 
-    If both trees are empty, similarity = 1.
+    Using (|T1| + |T2|) as the denominator gives a value of 0 when every node
+    in both trees is deleted/inserted (worst case), and 1 when both trees are
+    identical (TED = 0).  This is the Nierman–Jagadish normalisation.
+
+    If both trees are empty, similarity is defined as 1.
     """
     denom = len_a + len_b
     if denom == 0:
@@ -230,11 +248,11 @@ def similarity_from_ted(ted: int, len_a: int, len_b: int) -> float:
 
 def compare_trees(tree_a: TreeNode, tree_b: TreeNode) -> Dict[str, Any]:
     """
-    Full 4.3 pipeline:
-    - flatten both trees
-    - compute TED
-    - backtrack edit script
-    - compute similarity
+    Full Section 4.3 pipeline:
+      1. Flatten both trees into preorder LD-pair sequences.
+      2. Compute TED via the DP table.
+      3. Backtrack to produce the minimum-cost edit script.
+      4. Compute normalised similarity.
     """
     seq_a = flatten_tree_preorder(tree_a)
     seq_b = flatten_tree_preorder(tree_b)
