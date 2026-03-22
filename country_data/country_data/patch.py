@@ -54,10 +54,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .tree_builder import TreeNode
 from .ted_diff import (
-    tree_from_dict,
     load_tree_by_country,
     compare_trees,
-    save_diff_json,
 )
 
 
@@ -107,11 +105,16 @@ def node_from_subtree_dict(d: Dict[str, Any]) -> TreeNode:
 def apply_update(root: TreeNode, op: Dict[str, Any]) -> None:
     """
     Update the label and node_type of the node at op["source_path"].
+
+    If the node's type changes to "token" (a leaf type), its children are
+    cleared to prevent structural inconsistencies in the patched tree.
     """
     path = op["source_path"]
     node = get_node(root, path)
     node.label = op["to_label"]
     node.node_type = op["to_type"]
+    if op["to_type"] == "token":
+        node.children = []
 
 
 def apply_delete(root: TreeNode, op: Dict[str, Any]) -> None:
@@ -184,6 +187,7 @@ def filter_top_level_inserts(inserts: List[Dict[str, Any]]) -> List[Dict[str, An
             filtered.append(op)
 
     return filtered
+
 
 # Main patching function
 def apply_edit_script(source_tree: TreeNode, edit_script: List[Dict[str, Any]]) -> TreeNode:
