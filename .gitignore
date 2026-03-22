@@ -1,3 +1,9 @@
 country_data/countries.json
 country_data/test.json
 .venv
+
+# Pipeline output files
+country_data/patched_*.json
+country_data/postprocessed_patched_*.json
+country_data/postprocessed_patched_*.txt
+country_data/diff_*.json

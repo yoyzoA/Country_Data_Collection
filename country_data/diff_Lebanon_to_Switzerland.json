@@ -1,9 +1,9 @@
 {
-  "ted": 170,
-  "similarity": 0.586374695863747,
+  "ted": 184,
+  "similarity": 0.5523114355231143,
   "source_node_count": 202,
   "target_node_count": 209,
-  "edit_script_length": 170,
+  "edit_script_length": 184,
   "edit_script": [
     {
       "op": "update",
@@ -66,20 +66,31 @@
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         2
       ],
-      "target_path": [
-        1,
-        1
-      ],
-      "from_label": "Constitution",
-      "to_label": "(",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Constitution",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Constitution",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "23",
+            "type": "token"
+          },
+          {
+            "label": "May",
+            "type": "token"
+          },
+          {
+            "label": "1926",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -89,9 +100,26 @@
       ],
       "target_path": [
         1,
-        2
+        1
       ],
       "from_label": "23",
+      "to_label": "(",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        2,
+        1
+      ],
+      "target_path": [
+        1,
+        2
+      ],
+      "from_label": "May",
       "to_label": "de",
       "from_type": "token",
       "to_type": "token",
@@ -102,13 +130,13 @@
       "op": "update",
       "source_path": [
         2,
-        1
+        2
       ],
       "target_path": [
         1,
         3
       ],
-      "from_label": "May",
+      "from_label": "1926",
       "to_label": "jure",
       "from_type": "token",
       "to_type": "token",
@@ -116,16 +144,51 @@
       "to_depth": 2
     },
     {
+      "op": "delete",
+      "source_path": [
+        3
+      ],
+      "label": "Currency",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Currency",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Lebanese",
+            "type": "token"
+          },
+          {
+            "label": "pound",
+            "type": "token"
+          },
+          {
+            "label": "(",
+            "type": "token"
+          },
+          {
+            "label": "LBP",
+            "type": "token"
+          },
+          {
+            "label": ")",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
       "op": "update",
       "source_path": [
-        2,
-        2
+        3,
+        0
       ],
       "target_path": [
         1,
         4
       ],
-      "from_label": "1926",
+      "from_label": "Lebanese",
       "to_label": ")",
       "from_type": "token",
       "to_type": "token",
@@ -135,64 +198,49 @@
     {
       "op": "update",
       "source_path": [
-        3
-      ],
-      "target_path": [
-        1,
-        5
-      ],
-      "from_label": "Currency",
-      "to_label": "Bern",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        3,
-        0
-      ],
-      "target_path": [
-        1,
-        6
-      ],
-      "from_label": "Lebanese",
-      "to_label": "(",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
         3,
         1
       ],
       "target_path": [
         1,
-        7
+        5
       ],
       "from_label": "pound",
-      "to_label": "de",
+      "to_label": "Bern",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
     },
     {
+      "op": "insert",
+      "target_path": [
+        1,
+        7
+      ],
+      "parent_path": [
+        1
+      ],
+      "position": 7,
+      "label": "de",
+      "node_type": "token",
+      "depth": 2,
+      "subtree": {
+        "label": "de",
+        "type": "token"
+      }
+    },
+    {
       "op": "update",
       "source_path": [
         3,
-        2
+        3
       ],
       "target_path": [
         1,
         8
       ],
-      "from_label": "(",
+      "from_label": "LBP",
       "to_label": "facto",
       "from_type": "token",
       "to_type": "token",
@@ -202,51 +250,17 @@
     {
       "op": "update",
       "source_path": [
-        3,
-        3
-      ],
-      "target_path": [
-        1,
-        9
-      ],
-      "from_label": "LBP",
-      "to_label": ")",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        3,
         4
       ],
       "target_path": [
         2
       ],
-      "from_label": ")",
-      "to_label": "Common languages",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        4
-      ],
-      "target_path": [
-        2,
-        0
-      ],
       "from_label": "Demonym(s)",
-      "to_label": "Latin",
+      "to_label": "Common languages",
       "from_type": "attribute",
-      "to_type": "token",
+      "to_type": "attribute",
       "from_depth": 1,
-      "to_depth": 2
+      "to_depth": 1
     },
     {
       "op": "update",
@@ -255,14 +269,15 @@
         0
       ],
       "target_path": [
-        3
+        2,
+        0
       ],
       "from_label": "Lebanese",
-      "to_label": "Currency",
+      "to_label": "Latin",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
     },
     {
       "op": "update",
@@ -270,15 +285,50 @@
         5
       ],
       "target_path": [
+        3
+      ],
+      "from_label": "Driving side",
+      "to_label": "Currency",
+      "from_type": "attribute",
+      "to_type": "attribute",
+      "from_depth": 1,
+      "to_depth": 1
+    },
+    {
+      "op": "insert",
+      "target_path": [
         3,
         0
       ],
-      "from_label": "Driving side",
-      "to_label": "Swiss",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "parent_path": [
+        3
+      ],
+      "position": 0,
+      "label": "Swiss",
+      "node_type": "token",
+      "depth": 2,
+      "subtree": {
+        "label": "Swiss",
+        "type": "token"
+      }
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        3,
+        1
+      ],
+      "parent_path": [
+        3
+      ],
+      "position": 1,
+      "label": "franc",
+      "node_type": "token",
+      "depth": 2,
+      "subtree": {
+        "label": "franc",
+        "type": "token"
+      }
     },
     {
       "op": "update",
@@ -288,30 +338,53 @@
       ],
       "target_path": [
         3,
-        1
+        2
       ],
       "from_label": "right",
-      "to_label": "franc",
+      "to_label": "(",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         6
       ],
-      "target_path": [
-        3,
-        2
-      ],
-      "from_label": "Ethnic groups",
-      "to_label": "(",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Ethnic groups",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Ethnic groups",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "95%",
+            "type": "token"
+          },
+          {
+            "label": "Arab",
+            "type": "token"
+          },
+          {
+            "label": "4%",
+            "type": "token"
+          },
+          {
+            "label": "Armenian",
+            "type": "token"
+          },
+          {
+            "label": "1%",
+            "type": "token"
+          },
+          {
+            "label": "Other",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -348,20 +421,54 @@
       "to_depth": 2
     },
     {
+      "op": "insert",
+      "target_path": [
+        4
+      ],
+      "parent_path": [],
+      "position": 4,
+      "label": "Date format",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Date format",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "dd.mm.yyyy",
+            "type": "token"
+          },
+          {
+            "label": "(",
+            "type": "token"
+          },
+          {
+            "label": "AD",
+            "type": "token"
+          },
+          {
+            "label": ")",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
       "op": "update",
       "source_path": [
         6,
         2
       ],
       "target_path": [
-        4
+        4,
+        0
       ],
       "from_label": "4%",
-      "to_label": "Date format",
+      "to_label": "dd.mm.yyyy",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
     },
     {
       "op": "update",
@@ -371,10 +478,10 @@
       ],
       "target_path": [
         4,
-        0
+        1
       ],
       "from_label": "Armenian",
-      "to_label": "dd.mm.yyyy",
+      "to_label": "(",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -388,10 +495,10 @@
       ],
       "target_path": [
         4,
-        1
+        2
       ],
       "from_label": "1%",
-      "to_label": "(",
+      "to_label": "AD",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -405,10 +512,10 @@
       ],
       "target_path": [
         4,
-        2
+        3
       ],
       "from_label": "Other",
-      "to_label": "AD",
+      "to_label": ")",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -420,60 +527,44 @@
         7
       ],
       "target_path": [
-        4,
-        3
-      ],
-      "from_label": "French mandate ended",
-      "to_label": ")",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        7,
-        0
-      ],
-      "target_path": [
         5
       ],
-      "from_label": "24",
+      "from_label": "French mandate ended",
       "to_label": "Demonym(s)",
-      "from_type": "token",
+      "from_type": "attribute",
       "to_type": "attribute",
-      "from_depth": 2,
+      "from_depth": 1,
       "to_depth": 1
     },
     {
-      "op": "update",
-      "source_path": [
-        7,
-        1
-      ],
+      "op": "insert",
       "target_path": [
         5,
         0
       ],
-      "from_label": "October",
-      "to_label": "English:",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
+      "parent_path": [
+        5
+      ],
+      "position": 0,
+      "label": "English:",
+      "node_type": "token",
+      "depth": 2,
+      "subtree": {
+        "label": "English:",
+        "type": "token"
+      }
     },
     {
       "op": "update",
       "source_path": [
         7,
-        2
+        0
       ],
       "target_path": [
         5,
         1
       ],
-      "from_label": "1945",
+      "from_label": "24",
       "to_label": "Swiss",
       "from_type": "token",
       "to_type": "token",
@@ -483,18 +574,59 @@
     {
       "op": "update",
       "source_path": [
-        8
+        7,
+        1
       ],
       "target_path": [
         5,
         2
       ],
-      "from_label": "Gini (2011)",
+      "from_label": "October",
       "to_label": ",",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        7,
+        2
+      ],
+      "target_path": [
+        5,
+        3
+      ],
+      "from_label": "1945",
+      "to_label": "German",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        8
+      ],
+      "label": "Gini (2011)",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Gini (2011)",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "31.8",
+            "type": "token"
+          },
+          {
+            "label": "medium",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -504,10 +636,10 @@
       ],
       "target_path": [
         5,
-        3
+        4
       ],
       "from_label": "31.8",
-      "to_label": "German",
+      "to_label": ":",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -521,30 +653,45 @@
       ],
       "target_path": [
         5,
-        4
+        5
       ],
       "from_label": "medium",
-      "to_label": ":",
+      "to_label": "Schweizer(in)",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         9
       ],
-      "target_path": [
-        5,
-        5
-      ],
-      "from_label": "Government",
-      "to_label": "Schweizer(in)",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Government",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Government",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Unitary",
+            "type": "token"
+          },
+          {
+            "label": "confessionalist",
+            "type": "token"
+          },
+          {
+            "label": "parliamentary",
+            "type": "token"
+          },
+          {
+            "label": "republic",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -615,20 +762,31 @@
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         10
       ],
-      "target_path": [
-        5,
-        10
-      ],
-      "from_label": "Greater Lebanon",
-      "to_label": ",",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Greater Lebanon",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Greater Lebanon",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "1",
+            "type": "token"
+          },
+          {
+            "label": "September",
+            "type": "token"
+          },
+          {
+            "label": "1920",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -638,9 +796,26 @@
       ],
       "target_path": [
         5,
-        11
+        10
       ],
       "from_label": "1",
+      "to_label": ",",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        10,
+        1
+      ],
+      "target_path": [
+        5,
+        11
+      ],
+      "from_label": "September",
       "to_label": "Italian",
       "from_type": "token",
       "to_type": "token",
@@ -651,13 +826,13 @@
       "op": "update",
       "source_path": [
         10,
-        1
+        2
       ],
       "target_path": [
         5,
         12
       ],
-      "from_label": "September",
+      "from_label": "1920",
       "to_label": ":",
       "from_type": "token",
       "to_type": "token",
@@ -665,37 +840,35 @@
       "to_depth": 2
     },
     {
-      "op": "update",
-      "source_path": [
-        10,
-        2
-      ],
-      "target_path": [
-        5,
-        13
-      ],
-      "from_label": "1920",
-      "to_label": "svizzero/svizzera,",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         11
       ],
-      "target_path": [
-        5,
-        14
-      ],
-      "from_label": "HDI (2019)",
-      "to_label": "or",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "HDI (2019)",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "HDI (2019)",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "0.744",
+            "type": "token"
+          },
+          {
+            "label": "high",
+            "type": "token"
+          },
+          {
+            "label": "·",
+            "type": "token"
+          },
+          {
+            "label": "92nd",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -705,9 +878,43 @@
       ],
       "target_path": [
         5,
-        15
+        13
       ],
       "from_label": "0.744",
+      "to_label": "svizzero/svizzera,",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        11,
+        1
+      ],
+      "target_path": [
+        5,
+        14
+      ],
+      "from_label": "high",
+      "to_label": "or",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        11,
+        2
+      ],
+      "target_path": [
+        5,
+        15
+      ],
+      "from_label": "·",
       "to_label": "elvetico/elvetica",
       "from_type": "token",
       "to_type": "token",
@@ -718,13 +925,13 @@
       "op": "update",
       "source_path": [
         11,
-        1
+        3
       ],
       "target_path": [
         5,
         16
       ],
-      "from_label": "high",
+      "from_label": "92nd",
       "to_label": ",",
       "from_type": "token",
       "to_type": "token",
@@ -732,16 +939,43 @@
       "to_depth": 2
     },
     {
+      "op": "delete",
+      "source_path": [
+        12
+      ],
+      "label": "Independence declared",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Independence declared",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "22",
+            "type": "token"
+          },
+          {
+            "label": "November",
+            "type": "token"
+          },
+          {
+            "label": "1943",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
       "op": "update",
       "source_path": [
-        11,
-        2
+        12,
+        0
       ],
       "target_path": [
         5,
         17
       ],
-      "from_label": "·",
+      "from_label": "22",
       "to_label": "Romansh",
       "from_type": "token",
       "to_type": "token",
@@ -751,14 +985,14 @@
     {
       "op": "update",
       "source_path": [
-        11,
-        3
+        12,
+        1
       ],
       "target_path": [
         5,
         18
       ],
-      "from_label": "92nd",
+      "from_label": "November",
       "to_label": ":",
       "from_type": "token",
       "to_type": "token",
@@ -768,46 +1002,46 @@
     {
       "op": "update",
       "source_path": [
-        12
+        12,
+        2
       ],
       "target_path": [
         5,
         19
       ],
-      "from_label": "Independence declared",
+      "from_label": "1943",
       "to_label": "Svizzer/Svizra",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
     },
     {
       "op": "update",
       "source_path": [
-        12,
-        0
+        13
       ],
       "target_path": [
         6
       ],
-      "from_label": "22",
+      "from_label": "Internet TLD",
       "to_label": "Driving side",
-      "from_type": "token",
+      "from_type": "attribute",
       "to_type": "attribute",
-      "from_depth": 2,
+      "from_depth": 1,
       "to_depth": 1
     },
     {
       "op": "update",
       "source_path": [
-        12,
-        1
+        13,
+        0
       ],
       "target_path": [
         6,
         0
       ],
-      "from_label": "November",
+      "from_label": ".lb",
       "to_label": "right",
       "from_type": "token",
       "to_type": "token",
@@ -817,46 +1051,47 @@
     {
       "op": "update",
       "source_path": [
-        12,
-        2
+        14
       ],
       "target_path": [
         7
       ],
-      "from_label": "1943",
+      "from_label": "ISO 3166 code",
       "to_label": "Federal Chancellor",
-      "from_type": "token",
+      "from_type": "attribute",
       "to_type": "attribute",
-      "from_depth": 2,
+      "from_depth": 1,
       "to_depth": 1
     },
     {
-      "op": "update",
-      "source_path": [
-        13
-      ],
+      "op": "insert",
       "target_path": [
         7,
         0
       ],
-      "from_label": "Internet TLD",
-      "to_label": "Viktor",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "parent_path": [
+        7
+      ],
+      "position": 0,
+      "label": "Viktor",
+      "node_type": "token",
+      "depth": 2,
+      "subtree": {
+        "label": "Viktor",
+        "type": "token"
+      }
     },
     {
       "op": "update",
       "source_path": [
-        13,
+        14,
         0
       ],
       "target_path": [
         7,
         1
       ],
-      "from_label": ".lb",
+      "from_label": "LB",
       "to_label": "Rossi",
       "from_type": "token",
       "to_type": "token",
@@ -866,12 +1101,12 @@
     {
       "op": "update",
       "source_path": [
-        14
+        15
       ],
       "target_path": [
         8
       ],
-      "from_label": "ISO 3166 code",
+      "from_label": "Israeli troops withdrawn",
       "to_label": "Federal Council",
       "from_type": "attribute",
       "to_type": "attribute",
@@ -881,14 +1116,14 @@
     {
       "op": "update",
       "source_path": [
-        14,
+        15,
         0
       ],
       "target_path": [
         8,
         0
       ],
-      "from_label": "LB",
+      "from_label": "24",
       "to_label": "Viola",
       "from_type": "token",
       "to_type": "token",
@@ -898,30 +1133,31 @@
     {
       "op": "update",
       "source_path": [
-        15
+        15,
+        1
       ],
       "target_path": [
         8,
         1
       ],
-      "from_label": "Israeli troops withdrawn",
+      "from_label": "May",
       "to_label": "Amherd",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
     },
     {
       "op": "update",
       "source_path": [
         15,
-        0
+        2
       ],
       "target_path": [
         8,
         2
       ],
-      "from_label": "24",
+      "from_label": "2000",
       "to_label": "(",
       "from_type": "token",
       "to_type": "token",
@@ -929,54 +1165,23 @@
       "to_depth": 2
     },
     {
-      "op": "update",
-      "source_path": [
-        15,
-        1
-      ],
-      "target_path": [
-        8,
-        3
-      ],
-      "from_label": "May",
-      "to_label": "President",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        15,
-        2
-      ],
-      "target_path": [
-        8,
-        4
-      ],
-      "from_label": "2000",
-      "to_label": ")",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         16
       ],
-      "target_path": [
-        8,
-        5
-      ],
-      "from_label": "Legislature",
-      "to_label": "Karin",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Legislature",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Legislature",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Parliament",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -986,30 +1191,37 @@
       ],
       "target_path": [
         8,
-        6
+        3
       ],
       "from_label": "Parliament",
-      "to_label": "Keller-Sutter",
+      "to_label": "President",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         17
       ],
-      "target_path": [
-        8,
-        7
-      ],
-      "from_label": "Local vernacular",
-      "to_label": "(",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Local vernacular",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Local vernacular",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Lebanese",
+            "type": "token"
+          },
+          {
+            "label": "Arabic",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1019,10 +1231,10 @@
       ],
       "target_path": [
         8,
-        8
+        4
       ],
       "from_label": "Lebanese",
-      "to_label": "Vice",
+      "to_label": ")",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1036,30 +1248,33 @@
       ],
       "target_path": [
         8,
-        9
+        5
       ],
       "from_label": "Arabic",
-      "to_label": "President",
+      "to_label": "Karin",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
     },
     {
-      "op": "update",
+      "op": "delete",
       "source_path": [
         18
       ],
-      "target_path": [
-        8,
-        10
-      ],
-      "from_label": "Official languages",
-      "to_label": ")",
-      "from_type": "attribute",
-      "to_type": "token",
-      "from_depth": 1,
-      "to_depth": 2
+      "label": "Official languages",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Official languages",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Arabic",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1069,9 +1284,163 @@
       ],
       "target_path": [
         8,
-        11
+        6
       ],
       "from_label": "Arabic",
+      "to_label": "Keller-Sutter",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        19
+      ],
+      "label": "President",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "President",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Joseph",
+            "type": "token"
+          },
+          {
+            "label": "Aoun",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
+      "op": "update",
+      "source_path": [
+        19,
+        0
+      ],
+      "target_path": [
+        8,
+        7
+      ],
+      "from_label": "Joseph",
+      "to_label": "(",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        19,
+        1
+      ],
+      "target_path": [
+        8,
+        8
+      ],
+      "from_label": "Aoun",
+      "to_label": "Vice",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        20
+      ],
+      "label": "Prime Minister",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Prime Minister",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Nawaf",
+            "type": "token"
+          },
+          {
+            "label": "Salam",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
+      "op": "update",
+      "source_path": [
+        20,
+        0
+      ],
+      "target_path": [
+        8,
+        9
+      ],
+      "from_label": "Nawaf",
+      "to_label": "President",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        20,
+        1
+      ],
+      "target_path": [
+        8,
+        10
+      ],
+      "from_label": "Salam",
+      "to_label": ")",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        21
+      ],
+      "label": "Recognised languages",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Recognised languages",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "French",
+            "type": "token"
+          },
+          {
+            "label": "English",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
+      "op": "update",
+      "source_path": [
+        21,
+        0
+      ],
+      "target_path": [
+        8,
+        11
+      ],
+      "from_label": "French",
       "to_label": "Guy",
       "from_type": "token",
       "to_type": "token",
@@ -1081,30 +1450,254 @@
     {
       "op": "update",
       "source_path": [
-        19
+        21,
+        1
       ],
       "target_path": [
         8,
         12
       ],
-      "from_label": "President",
+      "from_label": "English",
       "to_label": "Parmelin",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        22
+      ],
+      "label": "Religion (Estimated )",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Religion (Estimated )",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Islam",
+            "type": "token"
+          },
+          {
+            "label": "~28.7%",
+            "type": "token"
+          },
+          {
+            "label": "Sunni",
+            "type": "token"
+          },
+          {
+            "label": "~28.4%",
+            "type": "token"
+          },
+          {
+            "label": "Shi'a",
+            "type": "token"
+          },
+          {
+            "label": "~0.6%",
+            "type": "token"
+          },
+          {
+            "label": "Other",
+            "type": "token"
+          },
+          {
+            "label": "(",
+            "type": "token"
+          },
+          {
+            "label": "Alawite",
+            "type": "token"
+          },
+          {
+            "label": "&",
+            "type": "token"
+          },
+          {
+            "label": "Ismaili",
+            "type": "token"
+          },
+          {
+            "label": ")",
+            "type": "token"
+          },
+          {
+            "label": "Christianity",
+            "type": "token"
+          },
+          {
+            "label": "~22%",
+            "type": "token"
+          },
+          {
+            "label": "Maronite",
+            "type": "token"
+          },
+          {
+            "label": "Catholic",
+            "type": "token"
+          },
+          {
+            "label": "~8%",
+            "type": "token"
+          },
+          {
+            "label": "Greek",
+            "type": "token"
+          },
+          {
+            "label": "Orthodox",
+            "type": "token"
+          },
+          {
+            "label": "~5%",
+            "type": "token"
+          },
+          {
+            "label": "Melkite",
+            "type": "token"
+          },
+          {
+            "label": "Catholic",
+            "type": "token"
+          },
+          {
+            "label": "~4%",
+            "type": "token"
+          },
+          {
+            "label": "Armenian",
+            "type": "token"
+          },
+          {
+            "label": "(",
+            "type": "token"
+          },
+          {
+            "label": "Apostolic",
+            "type": "token"
+          },
+          {
+            "label": "&",
+            "type": "token"
+          },
+          {
+            "label": "Catholic",
+            "type": "token"
+          },
+          {
+            "label": ")",
+            "type": "token"
+          },
+          {
+            "label": "~1%",
+            "type": "token"
+          },
+          {
+            "label": "Minorities",
+            "type": "token"
+          },
+          {
+            "label": "(",
+            "type": "token"
+          },
+          {
+            "label": "Jacobite",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": "Syriac",
+            "type": "token"
+          },
+          {
+            "label": "Catholic",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": "ACOE",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": "Chaldean",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": "Latin",
+            "type": "token"
+          },
+          {
+            "label": "Catholic",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": "and",
+            "type": "token"
+          },
+          {
+            "label": "Coptic",
+            "type": "token"
+          },
+          {
+            "label": ")",
+            "type": "token"
+          },
+          {
+            "label": "~1%",
+            "type": "token"
+          },
+          {
+            "label": "Evangelical",
+            "type": "token"
+          },
+          {
+            "label": "Druzism",
+            "type": "token"
+          },
+          {
+            "label": "~5.2%",
+            "type": "token"
+          },
+          {
+            "label": "Druze",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
       "source_path": [
-        19,
+        22,
         0
       ],
       "target_path": [
         8,
         13
       ],
-      "from_label": "Joseph",
+      "from_label": "Islam",
       "to_label": "Ignazio",
       "from_type": "token",
       "to_type": "token",
@@ -1114,14 +1707,14 @@
     {
       "op": "update",
       "source_path": [
-        19,
+        22,
         1
       ],
       "target_path": [
         8,
         14
       ],
-      "from_label": "Aoun",
+      "from_label": "~28.7%",
       "to_label": "Cassis",
       "from_type": "token",
       "to_type": "token",
@@ -1131,30 +1724,31 @@
     {
       "op": "update",
       "source_path": [
-        20
+        22,
+        2
       ],
       "target_path": [
         8,
         15
       ],
-      "from_label": "Prime Minister",
+      "from_label": "Sunni",
       "to_label": "Élisabeth",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
     },
     {
       "op": "update",
       "source_path": [
-        20,
-        0
+        22,
+        3
       ],
       "target_path": [
         8,
         16
       ],
-      "from_label": "Nawaf",
+      "from_label": "~28.4%",
       "to_label": "Baume-Schneider",
       "from_type": "token",
       "to_type": "token",
@@ -1164,14 +1758,14 @@
     {
       "op": "update",
       "source_path": [
-        20,
-        1
+        22,
+        4
       ],
       "target_path": [
         8,
         17
       ],
-      "from_label": "Salam",
+      "from_label": "Shi'a",
       "to_label": "Albert",
       "from_type": "token",
       "to_type": "token",
@@ -1181,30 +1775,31 @@
     {
       "op": "update",
       "source_path": [
-        21
+        22,
+        5
       ],
       "target_path": [
         8,
         18
       ],
-      "from_label": "Recognised languages",
+      "from_label": "~0.6%",
       "to_label": "Rösti",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
     },
     {
       "op": "update",
       "source_path": [
-        21,
-        0
+        22,
+        6
       ],
       "target_path": [
         8,
         19
       ],
-      "from_label": "French",
+      "from_label": "Other",
       "to_label": "Beat",
       "from_type": "token",
       "to_type": "token",
@@ -1214,14 +1809,14 @@
     {
       "op": "update",
       "source_path": [
-        21,
-        1
+        22,
+        7
       ],
       "target_path": [
         8,
         20
       ],
-      "from_label": "English",
+      "from_label": "(",
       "to_label": "Jans",
       "from_type": "token",
       "to_type": "token",
@@ -1229,31 +1824,45 @@
       "to_depth": 2
     },
     {
-      "op": "update",
-      "source_path": [
-        22
-      ],
+      "op": "insert",
       "target_path": [
         9
       ],
-      "from_label": "Religion (Estimated )",
-      "to_label": "Federal state",
-      "from_type": "attribute",
-      "to_type": "attribute",
-      "from_depth": 1,
-      "to_depth": 1
+      "parent_path": [],
+      "position": 9,
+      "label": "Federal state",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Federal state",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "12",
+            "type": "token"
+          },
+          {
+            "label": "September",
+            "type": "token"
+          },
+          {
+            "label": "1848",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
       "source_path": [
         22,
-        0
+        8
       ],
       "target_path": [
         9,
         0
       ],
-      "from_label": "Islam",
+      "from_label": "Alawite",
       "to_label": "12",
       "from_type": "token",
       "to_type": "token",
@@ -1264,13 +1873,13 @@
       "op": "update",
       "source_path": [
         22,
-        1
+        9
       ],
       "target_path": [
         9,
         1
       ],
-      "from_label": "~28.7%",
+      "from_label": "&",
       "to_label": "September",
       "from_type": "token",
       "to_type": "token",
@@ -1281,13 +1890,13 @@
       "op": "update",
       "source_path": [
         22,
-        2
+        10
       ],
       "target_path": [
         9,
         2
       ],
-      "from_label": "Sunni",
+      "from_label": "Ismaili",
       "to_label": "1848",
       "from_type": "token",
       "to_type": "token",
@@ -1295,138 +1904,45 @@
       "to_depth": 2
     },
     {
-      "op": "update",
-      "source_path": [
-        22,
-        3
-      ],
+      "op": "insert",
       "target_path": [
         10
       ],
-      "from_label": "~28.4%",
-      "to_label": "Foundation date",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        4
-      ],
-      "target_path": [
-        10,
-        0
-      ],
-      "from_label": "Shi'a",
-      "to_label": "c.",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        5
-      ],
-      "target_path": [
-        10,
-        1
-      ],
-      "from_label": "~0.6%",
-      "to_label": "1300",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        6
-      ],
-      "target_path": [
-        10,
-        2
-      ],
-      "from_label": "Other",
-      "to_label": "(traditionally",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        7
-      ],
-      "target_path": [
-        10,
-        3
-      ],
-      "from_label": "(",
-      "to_label": "1",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        8
-      ],
-      "target_path": [
-        10,
-        4
-      ],
-      "from_label": "Alawite",
-      "to_label": "August",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        9
-      ],
-      "target_path": [
-        10,
-        5
-      ],
-      "from_label": "&",
-      "to_label": "1291)",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        10
-      ],
-      "target_path": [
-        11
-      ],
-      "from_label": "Ismaili",
-      "to_label": "Gini (2018)",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
+      "parent_path": [],
+      "position": 10,
+      "label": "Foundation date",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Foundation date",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "c.",
+            "type": "token"
+          },
+          {
+            "label": "1300",
+            "type": "token"
+          },
+          {
+            "label": "(traditionally",
+            "type": "token"
+          },
+          {
+            "label": "1",
+            "type": "token"
+          },
+          {
+            "label": "August",
+            "type": "token"
+          },
+          {
+            "label": "1291)",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1435,11 +1951,11 @@
         11
       ],
       "target_path": [
-        11,
+        10,
         0
       ],
       "from_label": ")",
-      "to_label": "29.7",
+      "to_label": "c.",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1452,11 +1968,11 @@
         12
       ],
       "target_path": [
-        11,
+        10,
         1
       ],
       "from_label": "Christianity",
-      "to_label": "low",
+      "to_label": "1300",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1469,11 +1985,11 @@
         13
       ],
       "target_path": [
-        11,
+        10,
         2
       ],
       "from_label": "~22%",
-      "to_label": "·",
+      "to_label": "(traditionally",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1486,11 +2002,11 @@
         14
       ],
       "target_path": [
-        11,
+        10,
         3
       ],
       "from_label": "Maronite",
-      "to_label": "19th",
+      "to_label": "1",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1503,27 +2019,11 @@
         15
       ],
       "target_path": [
-        12
+        10,
+        4
       ],
       "from_label": "Catholic",
-      "to_label": "Government",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        16
-      ],
-      "target_path": [
-        12,
-        0
-      ],
-      "from_label": "~8%",
-      "to_label": "Federal",
+      "to_label": "August",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1533,14 +2033,64 @@
       "op": "update",
       "source_path": [
         22,
+        16
+      ],
+      "target_path": [
+        10,
+        5
+      ],
+      "from_label": "~8%",
+      "to_label": "1291)",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        11
+      ],
+      "parent_path": [],
+      "position": 11,
+      "label": "Gini (2018)",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Gini (2018)",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "29.7",
+            "type": "token"
+          },
+          {
+            "label": "low",
+            "type": "token"
+          },
+          {
+            "label": "·",
+            "type": "token"
+          },
+          {
+            "label": "19th",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
+      "op": "update",
+      "source_path": [
+        22,
         17
       ],
       "target_path": [
-        12,
-        1
+        11,
+        0
       ],
       "from_label": "Greek",
-      "to_label": "semi-direct",
+      "to_label": "29.7",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1553,11 +2103,11 @@
         18
       ],
       "target_path": [
-        12,
-        2
+        11,
+        1
       ],
       "from_label": "Orthodox",
-      "to_label": "democracy",
+      "to_label": "low",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1570,11 +2120,11 @@
         19
       ],
       "target_path": [
-        12,
-        3
+        11,
+        2
       ],
       "from_label": "~5%",
-      "to_label": "under",
+      "to_label": "·",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1587,15 +2137,68 @@
         20
       ],
       "target_path": [
-        12,
-        4
+        11,
+        3
       ],
       "from_label": "Melkite",
-      "to_label": "a",
+      "to_label": "19th",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        12
+      ],
+      "parent_path": [],
+      "position": 12,
+      "label": "Government",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Government",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Federal",
+            "type": "token"
+          },
+          {
+            "label": "semi-direct",
+            "type": "token"
+          },
+          {
+            "label": "democracy",
+            "type": "token"
+          },
+          {
+            "label": "under",
+            "type": "token"
+          },
+          {
+            "label": "a",
+            "type": "token"
+          },
+          {
+            "label": "multi-party",
+            "type": "token"
+          },
+          {
+            "label": "parliamentary",
+            "type": "token"
+          },
+          {
+            "label": "directorial",
+            "type": "token"
+          },
+          {
+            "label": "republic",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1605,10 +2208,10 @@
       ],
       "target_path": [
         12,
-        5
+        0
       ],
       "from_label": "Catholic",
-      "to_label": "multi-party",
+      "to_label": "Federal",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1622,10 +2225,10 @@
       ],
       "target_path": [
         12,
-        6
+        1
       ],
       "from_label": "~4%",
-      "to_label": "parliamentary",
+      "to_label": "semi-direct",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1639,10 +2242,10 @@
       ],
       "target_path": [
         12,
-        7
+        2
       ],
       "from_label": "Armenian",
-      "to_label": "directorial",
+      "to_label": "democracy",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1656,10 +2259,10 @@
       ],
       "target_path": [
         12,
-        8
+        3
       ],
       "from_label": "(",
-      "to_label": "republic",
+      "to_label": "under",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1672,14 +2275,15 @@
         25
       ],
       "target_path": [
-        13
+        12,
+        4
       ],
       "from_label": "Apostolic",
-      "to_label": "HDI (2018)",
+      "to_label": "a",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
     },
     {
       "op": "update",
@@ -1688,11 +2292,11 @@
         26
       ],
       "target_path": [
-        13,
-        0
+        12,
+        5
       ],
       "from_label": "&",
-      "to_label": "0.946",
+      "to_label": "multi-party",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1705,11 +2309,11 @@
         27
       ],
       "target_path": [
-        13,
-        1
+        12,
+        6
       ],
       "from_label": "Catholic",
-      "to_label": "very",
+      "to_label": "parliamentary",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1722,11 +2326,11 @@
         28
       ],
       "target_path": [
-        13,
-        2
+        12,
+        7
       ],
       "from_label": ")",
-      "to_label": "high",
+      "to_label": "directorial",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1739,15 +2343,52 @@
         29
       ],
       "target_path": [
-        13,
-        3
+        12,
+        8
       ],
       "from_label": "~1%",
-      "to_label": "·",
+      "to_label": "republic",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        13
+      ],
+      "parent_path": [],
+      "position": 13,
+      "label": "HDI (2018)",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "HDI (2018)",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "0.946",
+            "type": "token"
+          },
+          {
+            "label": "very",
+            "type": "token"
+          },
+          {
+            "label": "high",
+            "type": "token"
+          },
+          {
+            "label": "·",
+            "type": "token"
+          },
+          {
+            "label": "2nd",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1757,10 +2398,10 @@
       ],
       "target_path": [
         13,
-        4
+        0
       ],
       "from_label": "Minorities",
-      "to_label": "2nd",
+      "to_label": "0.946",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1773,14 +2414,15 @@
         31
       ],
       "target_path": [
-        14
+        13,
+        1
       ],
       "from_label": "(",
-      "to_label": "Internet TLD",
+      "to_label": "very",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
     },
     {
       "op": "update",
@@ -1789,11 +2431,45 @@
         32
       ],
       "target_path": [
-        14,
-        0
+        13,
+        2
       ],
       "from_label": "Jacobite",
-      "to_label": ".ch",
+      "to_label": "high",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        22,
+        33
+      ],
+      "target_path": [
+        13,
+        3
+      ],
+      "from_label": ",",
+      "to_label": "·",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        22,
+        34
+      ],
+      "target_path": [
+        13,
+        4
+      ],
+      "from_label": "Syriac",
+      "to_label": "2nd",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1802,20 +2478,65 @@
     {
       "op": "insert",
       "target_path": [
+        14
+      ],
+      "parent_path": [],
+      "position": 14,
+      "label": "Internet TLD",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Internet TLD",
+        "type": "attribute",
+        "children": [
+          {
+            "label": ".ch",
+            "type": "token"
+          },
+          {
+            "label": ",",
+            "type": "token"
+          },
+          {
+            "label": ".swiss",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
+      "op": "update",
+      "source_path": [
+        22,
+        35
+      ],
+      "target_path": [
+        14,
+        0
+      ],
+      "from_label": "Catholic",
+      "to_label": ".ch",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
+    },
+    {
+      "op": "update",
+      "source_path": [
+        22,
+        37
+      ],
+      "target_path": [
         14,
         2
       ],
-      "parent_path": [
-        14
-      ],
-      "position": 2,
-      "label": ".swiss",
-      "node_type": "token",
-      "depth": 2,
-      "subtree": {
-        "label": ".swiss",
-        "type": "token"
-      }
+      "from_label": "ACOE",
+      "to_label": ".swiss",
+      "from_type": "token",
+      "to_type": "token",
+      "from_depth": 2,
+      "to_depth": 2
     },
     {
       "op": "insert",
@@ -1839,105 +2560,42 @@
       }
     },
     {
-      "op": "insert",
-      "target_path": [
-        15,
-        0
-      ],
-      "parent_path": [
-        15
-      ],
-      "position": 0,
-      "label": "CH",
-      "node_type": "token",
-      "depth": 2,
-      "subtree": {
-        "label": "CH",
-        "type": "token"
-      }
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        34
-      ],
-      "target_path": [
-        16
-      ],
-      "from_label": "Syriac",
-      "to_label": "Largest city",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        35
-      ],
-      "target_path": [
-        16,
-        0
-      ],
-      "from_label": "Catholic",
-      "to_label": "Zürich",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        36
-      ],
-      "target_path": [
-        17
-      ],
-      "from_label": ",",
-      "to_label": "Legislature",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        22,
-        37
-      ],
-      "target_path": [
-        17,
-        0
-      ],
-      "from_label": "ACOE",
-      "to_label": "Federal",
-      "from_type": "token",
-      "to_type": "token",
-      "from_depth": 2,
-      "to_depth": 2
-    },
-    {
       "op": "update",
       "source_path": [
         22,
         38
       ],
       "target_path": [
-        17,
-        1
+        15,
+        0
       ],
       "from_label": ",",
-      "to_label": "Assembly",
+      "to_label": "CH",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        16
+      ],
+      "parent_path": [],
+      "position": 16,
+      "label": "Largest city",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Largest city",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Zürich",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1946,14 +2604,40 @@
         39
       ],
       "target_path": [
-        18
+        16,
+        0
       ],
       "from_label": "Chaldean",
-      "to_label": "Lower house",
+      "to_label": "Zürich",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        17
+      ],
+      "parent_path": [],
+      "position": 17,
+      "label": "Legislature",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Legislature",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Federal",
+            "type": "token"
+          },
+          {
+            "label": "Assembly",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1962,11 +2646,11 @@
         40
       ],
       "target_path": [
-        18,
+        17,
         0
       ],
       "from_label": ",",
-      "to_label": "National",
+      "to_label": "Federal",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -1979,15 +2663,40 @@
         41
       ],
       "target_path": [
-        18,
+        17,
         1
       ],
       "from_label": "Latin",
-      "to_label": "Council",
+      "to_label": "Assembly",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        18
+      ],
+      "parent_path": [],
+      "position": 18,
+      "label": "Lower house",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Lower house",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "National",
+            "type": "token"
+          },
+          {
+            "label": "Council",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -1996,14 +2705,15 @@
         42
       ],
       "target_path": [
-        19
+        18,
+        0
       ],
       "from_label": "Catholic",
-      "to_label": "Official languages",
+      "to_label": "National",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
     },
     {
       "op": "update",
@@ -2012,15 +2722,48 @@
         43
       ],
       "target_path": [
-        19,
-        0
+        18,
+        1
       ],
       "from_label": ",",
-      "to_label": "German",
+      "to_label": "Council",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        19
+      ],
+      "parent_path": [],
+      "position": 19,
+      "label": "Official languages",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Official languages",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "German",
+            "type": "token"
+          },
+          {
+            "label": "French",
+            "type": "token"
+          },
+          {
+            "label": "Italian",
+            "type": "token"
+          },
+          {
+            "label": "Romansh",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -2030,10 +2773,10 @@
       ],
       "target_path": [
         19,
-        1
+        0
       ],
       "from_label": "and",
-      "to_label": "French",
+      "to_label": "German",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -2047,10 +2790,10 @@
       ],
       "target_path": [
         19,
-        2
+        1
       ],
       "from_label": "Coptic",
-      "to_label": "Italian",
+      "to_label": "French",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -2064,10 +2807,10 @@
       ],
       "target_path": [
         19,
-        3
+        2
       ],
       "from_label": ")",
-      "to_label": "Romansh",
+      "to_label": "Italian",
       "from_type": "token",
       "to_type": "token",
       "from_depth": 2,
@@ -2080,14 +2823,44 @@
         47
       ],
       "target_path": [
-        20
+        19,
+        3
       ],
       "from_label": "~1%",
-      "to_label": "Peace of Westphalia",
+      "to_label": "Romansh",
       "from_type": "token",
-      "to_type": "attribute",
+      "to_type": "token",
       "from_depth": 2,
-      "to_depth": 1
+      "to_depth": 2
+    },
+    {
+      "op": "insert",
+      "target_path": [
+        20
+      ],
+      "parent_path": [],
+      "position": 20,
+      "label": "Peace of Westphalia",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Peace of Westphalia",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "24",
+            "type": "token"
+          },
+          {
+            "label": "October",
+            "type": "token"
+          },
+          {
+            "label": "1648",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",
@@ -2141,36 +2914,73 @@
       "to_depth": 2
     },
     {
+      "op": "insert",
+      "target_path": [
+        21
+      ],
+      "parent_path": [],
+      "position": 21,
+      "label": "Restoration",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Restoration",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "7",
+            "type": "token"
+          },
+          {
+            "label": "August",
+            "type": "token"
+          },
+          {
+            "label": "1815",
+            "type": "token"
+          }
+        ]
+      }
+    },
+    {
       "op": "update",
       "source_path": [
         22,
         51
       ],
       "target_path": [
-        21
-      ],
-      "from_label": "Druze",
-      "to_label": "Restoration",
-      "from_type": "token",
-      "to_type": "attribute",
-      "from_depth": 2,
-      "to_depth": 1
-    },
-    {
-      "op": "update",
-      "source_path": [
-        23
-      ],
-      "target_path": [
         21,
         0
       ],
-      "from_label": "Speaker of the Parliament",
+      "from_label": "Druze",
       "to_label": "7",
-      "from_type": "attribute",
+      "from_type": "token",
       "to_type": "token",
-      "from_depth": 1,
+      "from_depth": 2,
       "to_depth": 2
+    },
+    {
+      "op": "delete",
+      "source_path": [
+        23
+      ],
+      "label": "Speaker of the Parliament",
+      "node_type": "attribute",
+      "depth": 1,
+      "subtree": {
+        "label": "Speaker of the Parliament",
+        "type": "attribute",
+        "children": [
+          {
+            "label": "Nabih",
+            "type": "token"
+          },
+          {
+            "label": "Berri",
+            "type": "token"
+          }
+        ]
+      }
     },
     {
       "op": "update",

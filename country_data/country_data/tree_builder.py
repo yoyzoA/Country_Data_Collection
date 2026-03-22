@@ -1,11 +1,11 @@
 """
-Tree builder fopr the data we extracted
+Tree builder for the data we extracted.
 - Root node = country name
 - Attribute nodes (flat key-value) = sorted alphabetically, placed before elements
 - Element nodes (nested dicts) = maintain document order, placed after attributes
 - Leaf nodes = individual tokens from text values (word-by-word tokenization)
 
-Tokenization is seperate node per token to make comparisons easier and more granular.
+Tokenization uses a separate node per token to make comparisons easier and more granular.
 """
 
 import re

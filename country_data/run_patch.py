@@ -36,7 +36,7 @@ def main():
     country_b = sys.argv[2] if len(sys.argv) > 2 else "Switzerland"
 
     print("=" * 65)
-    print(f" Section 4.4 – Tree Patching: {country_a} → {country_b}")
+    print(f" Section 4.4 - Tree Patching: {country_a} -> {country_b}")
     print("=" * 65)
 
     # ── Load trees ──────────────────────────────────────────────────────────
@@ -63,7 +63,7 @@ def main():
     print(f"  Operation breakdown: {op_counts}")
 
     # ── Section 4.4: patch T1 with ES(T1, T2) ──────────────────────────────
-    print(f"\n[4.4] Applying edit script to transform {country_a} → {country_b} ...")
+    print(f"\n[4.4] Applying edit script to transform {country_a} -> {country_b} ...")
     patched = apply_edit_script(tree_a, ops)
 
     # ── Verification ────────────────────────────────────────────────────────
@@ -75,10 +75,10 @@ def main():
     print(f"  Residual similarity: {verification['residual_similarity']:.4f}")
 
     if verification["residual_ted"] == 0:
-        print("\n  ✓ Patched tree is structurally identical to the target tree!")
+        print("\n  [OK] Patched tree is structurally identical to the target tree!")
     else:
         print(
-            f"\n  ⚠ Residual TED = {verification['residual_ted']}. "
+            f"\n  [WARN] Residual TED = {verification['residual_ted']}. "
             "Some operations could not be applied perfectly due to\n"
             "  LD-sequence approximation (the DP aligns flat sequences, "
             "not true ordered trees)."
