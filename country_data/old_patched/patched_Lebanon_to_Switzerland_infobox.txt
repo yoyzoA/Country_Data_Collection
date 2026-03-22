@@ -1,0 +1,61 @@
+Country: Switzerland
+====================
+Calling code: +41
+Capital: None
+(:
+  - (
+  - (
+  - (
+Bern: Bern
+Latin: Latin
+Swiss: Swiss
+):
+  - )
+  - )
+,:
+  - ,
+  - ,
+Schweizer(in): Schweizer(in)
+or: or
+Svizzer/Svizra: Svizzer/Svizra
+Viktor: Viktor
+Federal Council: Viola .swiss
+ISO 3166 code: CH
+Amherd: Amherd
+Karin: Karin
+Parmelin: Parmelin
+Élisabeth: Élisabeth
+Rösti: Rösti
+Federal state:
+  Foundation date: 
+  Gini (2018): 
+  Government: 
+  HDI (2018): 
+  Internet TLD: 
+  Largest city: 
+  Legislature: 
+  Lower house: 
+  Official languages: 
+  Peace of Westphalia: 
+  Restoration: 
+  _text: 12 September 1848 c. 1300 (traditionally 1 August 1291) 29.7 low · 19th Federal semi-direct democracy under a multi-party parliamentary directorial republic 0.946 very high · 2nd .ch , Zürich Federal Assembly National Council German French Italian Romansh 24 October 1648
+7: 7
+Summer ( DST ): UTC +2 ( CEST )
+Time zone:
+  2015 census: 8,327,126
+  _text: UTC +1 ( CET )
+Upper house: Council of States
+Area:
+  Total: 41,285 km 2 (15,940 sq mi) ( 132nd )
+  Water (%): $82,950 ( 2nd 4.2
+Population:
+  2019 estimate: 8,570,146 ( 99th )
+  Density: 207/km 2 (536.1/sq mi) ( 48th )
+GDP ( PPP ):
+  estimate: 2018 estimate
+  Per capita: $64,649 ( 9th )
+  Total: $548 billion
+GDP (nominal):
+  estimate: 2018 estimate
+  Per capita: )
+  Total: $704 billion ( 20th )

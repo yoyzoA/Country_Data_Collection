@@ -15,36 +15,47 @@ Produces:
 How it works:
 The edit script is a list of node-level operations recovered by backtracking
 the TED dynamic-programming matrix:
-  - "update": change the label and/or node_type of the node at source_path
+  - "update": change the label and/or node_type of the node at source_path,
+               and re-parent it if its target_path places it under a different
+               parent than its current source_path parent.
   - "delete": remove the subtree rooted at source_path from T1
   - "insert": insert a subtree at the given parent_path / position
 
-Since updates do not change tree shape, they are applied first.
-Deletes are then applied in reverse preorder (deepest / latest paths first)
-so that removing a node does not invalidate the paths of nodes that still
-need to be deleted.
-Inserts are applied afterwards in forward preorder (shallowest first) so that
-parent locations are available before descendant insertions are considered.
+Application order:
+  1. In-place UPDATE operations (same parent in source and target).
+     These only relabel the node; no structural change occurs.
 
-Note:
-The edit script is derived from a flattened preorder alignment rather than
-from an exact subtree-aware tree mapping. For that reason, patching is an
-approximation step, and the patched tree is checked afterwards by comparing
-it to the true target tree.
+  2. DELETE operations, in reverse preorder (deepest / rightmost paths first).
+     Deletes run before re-parenting because their source paths are still
+     valid at this stage. Running them after re-parenting would shift indices
+     and cause path misses.
+
+  3. Re-parenting UPDATE operations, in two sub-steps:
+     a. DETACH: all nodes that must move are popped from their current parent,
+        in reverse source-path order (deepest/rightmost first) so that an
+        earlier pop never shifts the index of a sibling that is also being
+        detached.
+     b. ATTACH: detached nodes are inserted at their target position, in
+        target-path order (shallowest first) so that a parent node is always
+        in place before its children arrive.
+
+  4. INSERT operations, in forward preorder (shallowest first) so that
+     parent nodes exist before their children are inserted.
+
+Re-parenting rationale:
+The DP aligns flat preorder LD-pair sequences, so a node at source_path in T1
+may legitimately belong at a different tree location (target_path) in T2.
+This happens when the number of children differs between matching subtrees --
+tokens that belong inside one attribute in T2 may be aligned to sibling
+attribute-level nodes in T1 (and vice-versa). The target_path stored in every
+update operation is the verified tree path in T2, so it is used directly as
+the re-parenting destination.
 
 Path representation:
 Every path is a list of child indices from the root, e.g.:
   []        -> the root node itself
   [0]       -> first child of root
   [0, 2]    -> third child of the first child of root
-
-Helpers:
-  - get_node()
-  - _get_parent_and_index()
-  - node_from_subtree_dict()
-  - apply_update()
-  - apply_delete()
-  - apply_insert()
 """
 
 import copy
@@ -61,11 +72,14 @@ from .ted_diff import (
 )
 
 
+# ---------------------------------------------------------------------------
 # Low-level tree navigation helpers
+# ---------------------------------------------------------------------------
+
 def get_node(root: TreeNode, path: List[int]) -> TreeNode:
     """
     Return the node reached by following *path* from *root*.
-    Raises IndexError / ValueError if the path is invalid.
+    Raises IndexError if the path is invalid.
     """
     node = root
     for step in path:
@@ -82,8 +96,7 @@ def get_node(root: TreeNode, path: List[int]) -> TreeNode:
 def _get_parent_and_index(root: TreeNode, path: List[int]) -> Tuple[TreeNode, int]:
     """
     Return (parent_node, child_index) for the node at *path*.
-    The path must have at least one element (you cannot ask for the parent of
-    the root).
+    Raises ValueError if path is empty (root has no parent).
     """
     if not path:
         raise ValueError("Cannot get parent of root node (empty path).")
@@ -91,7 +104,10 @@ def _get_parent_and_index(root: TreeNode, path: List[int]) -> Tuple[TreeNode, in
     return parent, path[-1]
 
 
+# ---------------------------------------------------------------------------
 # Node reconstruction from edit-script subtree snapshots
+# ---------------------------------------------------------------------------
+
 def node_from_subtree_dict(d: Dict[str, Any]) -> TreeNode:
     """
     Reconstruct a TreeNode (and its whole subtree) from the subtree snapshot
@@ -103,33 +119,72 @@ def node_from_subtree_dict(d: Dict[str, Any]) -> TreeNode:
     return node
 
 
+# ---------------------------------------------------------------------------
 # Individual operation applicators
-def apply_update(root: TreeNode, op: Dict[str, Any]) -> None:
+# ---------------------------------------------------------------------------
+
+def apply_inplace_update(root: TreeNode, op: Dict[str, Any]) -> None:
     """
-    Update the label and node_type of the node at op["source_path"].
+    Relabel the node at op["source_path"] without moving it.
+    Used for updates where source and target share the same parent.
     """
-    path = op["source_path"]
-    node = get_node(root, path)
+    try:
+        node = get_node(root, op["source_path"])
+    except (IndexError, ValueError):
+        return
     node.label = op["to_label"]
     node.node_type = op["to_type"]
+
+
+def detach_node(root: TreeNode, op: Dict[str, Any]) -> Optional[Tuple[Any, TreeNode]]:
+    """
+    Pop the node at op["source_path"] from its parent, relabel it, and return
+    (op, node) so the caller can re-attach it later.
+
+    Returns None if the path is invalid (node already removed or never existed).
+    """
+    sp = op["source_path"]
+    try:
+        parent, idx = _get_parent_and_index(root, sp)
+    except (IndexError, ValueError):
+        return None
+    if idx >= len(parent.children):
+        return None
+    node = parent.children.pop(idx)
+    node.label = op["to_label"]
+    node.node_type = op["to_type"]
+    return (op, node)
+
+
+def attach_node(root: TreeNode, op: Dict[str, Any], node: TreeNode) -> None:
+    """
+    Insert *node* at the position given by op["target_path"].
+    Silently skips if the target parent does not exist.
+    """
+    tp = op["target_path"]
+    try:
+        tgt_parent = get_node(root, tp[:-1])
+    except (IndexError, ValueError):
+        print(
+            f"[patch] WARNING - attach target parent not found "
+            f"(target_path={tp}); node '{node.label}' not placed."
+        )
+        return
+    pos = min(tp[-1], len(tgt_parent.children))
+    tgt_parent.children.insert(pos, node)
 
 
 def apply_delete(root: TreeNode, op: Dict[str, Any]) -> None:
     """
     Delete the subtree rooted at op["source_path"].
-
-    Note: deleting a node also deletes all its descendants, but the edit
-    script may contain separate delete operations for those descendants.
-    We guard against double-deletion by skipping paths that no longer exist.
+    Silently skips if the path no longer exists.
     """
     path = op["source_path"]
     if not path:
-        # Deleting the root is not meaningful in our context; skip silently.
         return
     try:
         parent, idx = _get_parent_and_index(root, path)
     except (IndexError, ValueError):
-        # Node was already removed as part of an ancestor's deletion.
         return
     if idx < len(parent.children):
         parent.children.pop(idx)
@@ -137,114 +192,134 @@ def apply_delete(root: TreeNode, op: Dict[str, Any]) -> None:
 
 def apply_insert(root: TreeNode, op: Dict[str, Any]) -> None:
     """
-    Insert the new subtree described by op["subtree"] at the position indicated
-    by op["parent_path"] and op["position"].
-
-    If the parent_path is None this is an insert at the root level, which we
-    treat as a no-op (the root update already handles root-level changes).
-
-    We clamp the insertion index to len(parent.children) so that operations
-    generated for the *target* tree's structure never fail even when the
-    current tree has fewer children than expected.
+    Insert the new subtree described by op["subtree"] at op["parent_path"] /
+    op["position"]. Silently skips if parent_path is None or invalid.
     """
     parent_path = op.get("parent_path")
     if parent_path is None:
-        return  # Cannot insert above the root; skip.
-
+        return
     try:
         parent = get_node(root, parent_path)
     except (IndexError, ValueError):
-        # Parent hasn't been created yet or was removed; skip this op.
         return
-
     position = op.get("position", len(parent.children))
     if position is None:
         position = len(parent.children)
-    # Clamp to valid range
     position = min(position, len(parent.children))
-
-    new_node = node_from_subtree_dict(op["subtree"])
-    parent.children.insert(position, new_node)
+    parent.children.insert(position, node_from_subtree_dict(op["subtree"]))
 
 
 def filter_top_level_inserts(inserts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Keep only insert operations whose ancestor is NOT also being inserted.
-
-    Since each insert operation stores a full subtree snapshot, inserting both
-    a node and one of its descendants would duplicate content.
+    Drop insert operations whose ancestor is also being inserted.
+    Since each insert carries a full subtree snapshot, inserting both a node
+    and one of its descendants would duplicate content.
     """
     insert_paths = {tuple(op.get("target_path") or []) for op in inserts}
     filtered = []
-
     for op in inserts:
         path = tuple(op.get("target_path") or [])
-        has_inserted_ancestor = any(path[:k] in insert_paths for k in range(1, len(path)))
+        has_inserted_ancestor = any(
+            path[:k] in insert_paths for k in range(1, len(path))
+        )
         if not has_inserted_ancestor:
             filtered.append(op)
-
     return filtered
 
+
+# ---------------------------------------------------------------------------
 # Main patching function
-def apply_edit_script(source_tree: TreeNode, edit_script: List[Dict[str, Any]]) -> TreeNode:
+# ---------------------------------------------------------------------------
+
+def apply_edit_script(
+    source_tree: TreeNode, edit_script: List[Dict[str, Any]]
+) -> TreeNode:
     """
     Apply *edit_script* to a deep copy of *source_tree* and return the result.
-
     The source tree is never modified in place.
 
-    Application order:
-      1. UPDATE operations  – applied first; paths still valid on original shape.
-      2. DELETE operations  – applied in *reverse preorder* (deepest first) so
-                             removing a node never invalidates the path of a
-                             sibling that must also be deleted.
-      3. INSERT operations  – applied in *forward preorder* (shallowest first)
-                             so parents exist before children are added.
+    Operation order (see module docstring for rationale):
+      1. In-place updates     -- relabel only, no index shifts
+      2. Deletes              -- reverse preorder; paths still valid here
+      3. Re-parent detach     -- pop movers in reverse source order
+      4. Re-parent attach     -- insert movers in forward target order
+      5. Inserts              -- forward preorder
     """
-    # Work on a deep copy so the caller's tree is untouched
     patched = copy.deepcopy(source_tree)
 
-    updates = [op for op in edit_script if op["op"] == "update"]
-    deletes = [op for op in edit_script if op["op"] == "delete"]
-    inserts = [op for op in edit_script if op["op"] == "insert"]
+    all_updates = [op for op in edit_script if op["op"] == "update"]
+    all_deletes = [op for op in edit_script if op["op"] == "delete"]
+    all_inserts = filter_top_level_inserts(
+        [op for op in edit_script if op["op"] == "insert"]
+    )
 
-    inserts = filter_top_level_inserts(inserts)
+    # Classify updates: in-place vs re-parent
+    inplace_updates = []
+    reparent_updates = []
+    for op in all_updates:
+        sp = op["source_path"]
+        tp = op.get("target_path")
+        src_parent = sp[:-1] if sp else None
+        tgt_parent = tp[:-1] if tp else None
+        if tp is not None and sp and tp and src_parent != tgt_parent:
+            reparent_updates.append(op)
+        else:
+            inplace_updates.append(op)
 
-    # 1. Updates
-    for op in updates:
-        try:
-            apply_update(patched, op)
-        except (IndexError, ValueError) as e:
-            # Log but continue: a failed update is non-fatal
-            print(f"[patch] WARNING – update skipped ({e}): {op}")
+    # 1. In-place updates
+    for op in inplace_updates:
+        apply_inplace_update(patched, op)
 
-    # 2. Deletes (reverse preorder = deepest first) 
+    # 2. Deletes -- reverse preorder so deeper paths go first
     deletes_sorted = sorted(
-        deletes,
+        all_deletes,
         key=lambda op: (len(op["source_path"]), op["source_path"]),
         reverse=True,
     )
     for op in deletes_sorted:
-        try:
-            apply_delete(patched, op)
-        except (IndexError, ValueError) as e:
-            print(f"[patch] WARNING – delete skipped ({e}): {op}")
+        apply_delete(patched, op)
 
-    # 3. Inserts (forward preorder = shallowest first)
-    # Sort by target_path length ascending so root-level inserts come first.
+    # 3. Re-parent detach -- reverse source-path order (deepest/rightmost first)
+    #    so popping one node does not shift the index of another node that
+    #    also needs to be detached at the same level.
+    reparent_detach_order = sorted(
+        reparent_updates,
+        key=lambda op: (len(op["source_path"]), op["source_path"]),
+        reverse=True,
+    )
+    detached: List[Tuple[Dict[str, Any], TreeNode]] = []
+    for op in reparent_detach_order:
+        result = detach_node(patched, op)
+        if result is not None:
+            detached.append(result)
+
+    # 4. Re-parent attach -- forward target-path order (shallowest first)
+    #    so parent nodes arrive before their children.
+    detached_attach_order = sorted(
+        detached,
+        key=lambda pair: (len(pair[0]["target_path"]), pair[0]["target_path"]),
+    )
+    for op, node in detached_attach_order:
+        attach_node(patched, op, node)
+
+    # 5. Inserts -- forward preorder (shallowest first)
     inserts_sorted = sorted(
-        inserts,
-        key=lambda op: (len(op.get("target_path") or []), op.get("target_path") or []),
+        all_inserts,
+        key=lambda op: (
+            len(op.get("target_path") or []),
+            op.get("target_path") or [],
+        ),
     )
     for op in inserts_sorted:
-        try:
-            apply_insert(patched, op)
-        except (IndexError, ValueError) as e:
-            print(f"[patch] WARNING – insert skipped ({e}): {op}")
+        apply_insert(patched, op)
 
     return patched
 
 
+# ---------------------------------------------------------------------------
 # High-level helpers
+# ---------------------------------------------------------------------------
+
 def patch_countries(
     json_path: str,
     country_a: str,
@@ -253,8 +328,6 @@ def patch_countries(
     """
     Load T1 and T2 from country_trees.json, compute ES(T1, T2), apply it to
     T1, and return (patched_tree, diff_result).
-
-    The returned *patched_tree* should structurally match T2.
     """
     tree_a = load_tree_by_country(json_path, country_a)
     tree_b = load_tree_by_country(json_path, country_b)
@@ -276,26 +349,26 @@ def tree_to_dict_full(node: TreeNode) -> Dict[str, Any]:
 
 
 def save_patched_tree(patched: TreeNode, output_path: str) -> None:
-    """
-    Serialise the patched tree to a JSON file.
-    """
+    """Serialise the patched tree to a JSON file."""
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(tree_to_dict_full(patched), f, indent=2, ensure_ascii=False)
 
 
+# ---------------------------------------------------------------------------
 # Verification helper
+# ---------------------------------------------------------------------------
+
 def verify_patch(
     patched: TreeNode,
     target: TreeNode,
 ) -> Dict[str, Any]:
     """
-    Compare the patched tree against the true target tree to measure how well
-    the patch reproduced T2.
+    Compare the patched tree against the true target tree.
 
     Returns a dict with:
-      - "patched_nodes"   : node count of the patched tree
-      - "target_nodes"    : node count of the target tree
-      - "residual_ted"    : TED between patched and target (ideally 0)
+      - "patched_nodes"       : node count of the patched tree
+      - "target_nodes"        : node count of the target tree
+      - "residual_ted"        : TED between patched and target (ideally 0)
       - "residual_similarity" : normalised similarity (ideally 1.0)
     """
     residual = compare_trees(patched, target)

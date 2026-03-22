@@ -19,11 +19,13 @@
         {
           "label": "None",
           "type": "token"
-        },
-        {
-          "label": "(",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "(",
+      "type": "token",
+      "children": [
         {
           "label": "de",
           "type": "token"
@@ -35,11 +37,13 @@
         {
           "label": ")",
           "type": "token"
-        },
-        {
-          "label": "Bern",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Bern",
+      "type": "token",
+      "children": [
         {
           "label": "(",
           "type": "token"
@@ -55,35 +59,37 @@
         {
           "label": ")",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Common languages",
-      "type": "attribute",
-      "children": [
-        {
-          "label": "Latin",
-          "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Currency",
-      "type": "attribute",
-      "children": [
-        {
-          "label": "Swiss",
-          "type": "token"
         },
+        {
+          "label": "Common languages",
+          "type": "attribute"
+        }
+      ]
+    },
+    {
+      "label": "Latin",
+      "type": "token",
+      "children": [
+        {
+          "label": "Currency",
+          "type": "attribute"
+        }
+      ]
+    },
+    {
+      "label": "Swiss",
+      "type": "token",
+      "children": [
         {
           "label": "franc",
           "type": "token"
-        },
-        {
-          "label": "(",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "(",
+      "type": "token",
+      "children": [
         {
           "label": "CHF",
           "type": "token"
@@ -91,13 +97,11 @@
         {
           "label": ")",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Date format",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Date format",
+          "type": "attribute"
+        },
         {
           "label": "dd.mm.yyyy",
           "type": "token"
@@ -109,17 +113,17 @@
         {
           "label": "AD",
           "type": "token"
-        },
-        {
-          "label": ")",
-          "type": "token"
         }
       ]
     },
     {
-      "label": "Demonym(s)",
-      "type": "attribute",
+      "label": ")",
+      "type": "token",
       "children": [
+        {
+          "label": "Demonym(s)",
+          "type": "attribute"
+        },
         {
           "label": "English:",
           "type": "token"
@@ -127,11 +131,13 @@
         {
           "label": "Swiss",
           "type": "token"
-        },
-        {
-          "label": ",",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": ",",
+      "type": "token",
+      "children": [
         {
           "label": "German",
           "type": "token"
@@ -139,11 +145,13 @@
         {
           "label": ":",
           "type": "token"
-        },
-        {
-          "label": "Schweizer(in)",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Schweizer(in)",
+      "type": "token",
+      "children": [
         {
           "label": ",",
           "type": "token"
@@ -159,11 +167,13 @@
         {
           "label": "Suisse(sse)",
           "type": "token"
-        },
-        {
-          "label": ",",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": ",",
+      "type": "token",
+      "children": [
         {
           "label": "Italian",
           "type": "token"
@@ -175,11 +185,13 @@
         {
           "label": "svizzero/svizzera,",
           "type": "token"
-        },
-        {
-          "label": "or",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "or",
+      "type": "token",
+      "children": [
         {
           "label": "elvetico/elvetica",
           "type": "token"
@@ -195,31 +207,31 @@
         {
           "label": ":",
           "type": "token"
-        },
-        {
-          "label": "Svizzer/Svizra",
-          "type": "token"
         }
       ]
     },
     {
-      "label": "Driving side",
-      "type": "attribute",
+      "label": "Svizzer/Svizra",
+      "type": "token",
       "children": [
+        {
+          "label": "Driving side",
+          "type": "attribute"
+        },
         {
           "label": "right",
           "type": "token"
+        },
+        {
+          "label": "Federal Chancellor",
+          "type": "attribute"
         }
       ]
     },
     {
-      "label": "Federal Chancellor",
-      "type": "attribute",
+      "label": "Viktor",
+      "type": "token",
       "children": [
-        {
-          "label": "Viktor",
-          "type": "token"
-        },
         {
           "label": "Rossi",
           "type": "token"
@@ -235,9 +247,25 @@
           "type": "token"
         },
         {
-          "label": "Amherd",
+          "label": ".swiss",
           "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "ISO 3166 code",
+      "type": "attribute",
+      "children": [
+        {
+          "label": "CH",
+          "type": "token"
+        }
+      ]
+    },
+    {
+      "label": "Amherd",
+      "type": "token",
+      "children": [
         {
           "label": "(",
           "type": "token"
@@ -249,19 +277,23 @@
         {
           "label": ")",
           "type": "token"
-        },
-        {
-          "label": "Karin",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Karin",
+      "type": "token",
+      "children": [
         {
           "label": "Keller-Sutter",
           "type": "token"
-        },
-        {
-          "label": "(",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "(",
+      "type": "token",
+      "children": [
         {
           "label": "Vice",
           "type": "token"
@@ -269,19 +301,23 @@
         {
           "label": "President",
           "type": "token"
-        },
-        {
-          "label": ")",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": ")",
+      "type": "token",
+      "children": [
         {
           "label": "Guy",
           "type": "token"
-        },
-        {
-          "label": "Parmelin",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Parmelin",
+      "type": "token",
+      "children": [
         {
           "label": "Ignazio",
           "type": "token"
@@ -289,11 +325,13 @@
         {
           "label": "Cassis",
           "type": "token"
-        },
-        {
-          "label": "Élisabeth",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Élisabeth",
+      "type": "token",
+      "children": [
         {
           "label": "Baume-Schneider",
           "type": "token"
@@ -301,11 +339,13 @@
         {
           "label": "Albert",
           "type": "token"
-        },
-        {
-          "label": "Rösti",
-          "type": "token"
-        },
+        }
+      ]
+    },
+    {
+      "label": "Rösti",
+      "type": "token",
+      "children": [
         {
           "label": "Beat",
           "type": "token"
@@ -333,15 +373,9 @@
           "type": "token"
         },
         {
-          "label": ",",
-          "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Foundation date",
-      "type": "attribute",
-      "children": [
+          "label": "Foundation date",
+          "type": "attribute"
+        },
         {
           "label": "c.",
           "type": "token"
@@ -365,13 +399,11 @@
         {
           "label": "1291)",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Gini (2018)",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Gini (2018)",
+          "type": "attribute"
+        },
         {
           "label": "29.7",
           "type": "token"
@@ -387,13 +419,11 @@
         {
           "label": "19th",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Government",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Government",
+          "type": "attribute"
+        },
         {
           "label": "Federal",
           "type": "token"
@@ -429,13 +459,11 @@
         {
           "label": "republic",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "HDI (2018)",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "HDI (2018)",
+          "type": "attribute"
+        },
         {
           "label": "0.946",
           "type": "token"
@@ -455,65 +483,31 @@
         {
           "label": "2nd",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Internet TLD",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Internet TLD",
+          "type": "attribute"
+        },
         {
           "label": ".ch",
           "type": "token"
         },
         {
-          "label": ".swiss",
-          "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "ISO 3166 code",
-      "type": "attribute",
-      "children": [
-        {
-          "label": "CH",
-          "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Summer ( DST )",
-      "type": "attribute",
-      "children": [
-        {
-          "label": "UTC",
+          "label": ",",
           "type": "token"
         },
         {
-          "label": "(",
-          "type": "token"
+          "label": "Largest city",
+          "type": "attribute"
         },
-        {
-          "label": ")",
-          "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Largest city",
-      "type": "attribute",
-      "children": [
         {
           "label": "Zürich",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Legislature",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Legislature",
+          "type": "attribute"
+        },
         {
           "label": "Federal",
           "type": "token"
@@ -521,13 +515,11 @@
         {
           "label": "Assembly",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Lower house",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Lower house",
+          "type": "attribute"
+        },
         {
           "label": "National",
           "type": "token"
@@ -535,13 +527,11 @@
         {
           "label": "Council",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Official languages",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Official languages",
+          "type": "attribute"
+        },
         {
           "label": "German",
           "type": "token"
@@ -557,13 +547,11 @@
         {
           "label": "Romansh",
           "type": "token"
-        }
-      ]
-    },
-    {
-      "label": "Peace of Westphalia",
-      "type": "attribute",
-      "children": [
+        },
+        {
+          "label": "Peace of Westphalia",
+          "type": "attribute"
+        },
         {
           "label": "24",
           "type": "token"
@@ -575,17 +563,17 @@
         {
           "label": "1648",
           "type": "token"
+        },
+        {
+          "label": "Restoration",
+          "type": "attribute"
         }
       ]
     },
     {
-      "label": "Restoration",
-      "type": "attribute",
+      "label": "7",
+      "type": "token",
       "children": [
-        {
-          "label": "7",
-          "type": "token"
-        },
         {
           "label": "August",
           "type": "token"
@@ -597,7 +585,7 @@
       ]
     },
     {
-      "label": "Time zone",
+      "label": "Summer ( DST )",
       "type": "attribute",
       "children": [
         {
@@ -609,7 +597,7 @@
           "type": "token"
         },
         {
-          "label": "+2",
+          "label": "(",
           "type": "token"
         },
         {
@@ -617,11 +605,39 @@
           "type": "token"
         },
         {
+          "label": ")",
+          "type": "token"
+        }
+      ]
+    },
+    {
+      "label": "Time zone",
+      "type": "attribute",
+      "children": [
+        {
+          "label": "2015 census",
+          "type": "attribute",
+          "children": [
+            {
+              "label": "8,327,126",
+              "type": "token"
+            }
+          ]
+        },
+        {
+          "label": "UTC",
+          "type": "token"
+        },
+        {
+          "label": "+1",
+          "type": "token"
+        },
+        {
           "label": "(",
           "type": "token"
         },
         {
-          "label": "EET",
+          "label": "CET",
           "type": "token"
         },
         {
@@ -635,16 +651,30 @@
       "type": "attribute",
       "children": [
         {
-          "label": "17",
+          "label": "Council",
           "type": "token"
         },
         {
-          "label": "+1",
+          "label": "of",
           "type": "token"
         },
         {
-          "label": "1946",
-          "type": "token"
+          "label": "States",
+          "type": "token",
+          "children": [
+            {
+              "label": "(",
+              "type": "token"
+            },
+            {
+              "label": "38th",
+              "type": "token"
+            },
+            {
+              "label": ")",
+              "type": "token"
+            }
+          ]
         }
       ]
     },
@@ -653,11 +683,11 @@
       "type": "element",
       "children": [
         {
-          "label": "Council",
-          "type": "token",
+          "label": "Total",
+          "type": "attribute",
           "children": [
             {
-              "label": "10,452",
+              "label": "41,285",
               "type": "token"
             },
             {
@@ -669,7 +699,7 @@
               "type": "token"
             },
             {
-              "label": "(4,036",
+              "label": "(15,940",
               "type": "token"
             },
             {
@@ -685,7 +715,7 @@
               "type": "token"
             },
             {
-              "label": "161st",
+              "label": "132nd",
               "type": "token"
             },
             {
@@ -695,11 +725,23 @@
           ]
         },
         {
-          "label": "of",
-          "type": "token",
+          "label": "Water (%)",
+          "type": "attribute",
           "children": [
             {
-              "label": "1.8",
+              "label": "$82,950",
+              "type": "token"
+            },
+            {
+              "label": "(",
+              "type": "token"
+            },
+            {
+              "label": "2nd",
+              "type": "token"
+            },
+            {
+              "label": "4.2",
               "type": "token"
             }
           ]
@@ -711,21 +753,11 @@
       "type": "element",
       "children": [
         {
-          "label": "2015 census",
+          "label": "2019 estimate",
           "type": "attribute",
           "children": [
             {
-              "label": "8,327,126",
-              "type": "token"
-            }
-          ]
-        },
-        {
-          "label": "2021 estimate",
-          "type": "attribute",
-          "children": [
-            {
-              "label": "41,285",
+              "label": "8,570,146",
               "type": "token"
             },
             {
@@ -733,11 +765,11 @@
               "type": "token"
             },
             {
-              "label": "109th",
+              "label": "99th",
               "type": "token"
             },
             {
-              "label": "(15,940",
+              "label": ")",
               "type": "token"
             }
           ]
@@ -747,7 +779,7 @@
           "type": "attribute",
           "children": [
             {
-              "label": "4.2",
+              "label": "207/km",
               "type": "token"
             },
             {
@@ -755,7 +787,7 @@
               "type": "token"
             },
             {
-              "label": "(1,450.4/sq",
+              "label": "(536.1/sq",
               "type": "token"
             },
             {
@@ -767,7 +799,7 @@
               "type": "token"
             },
             {
-              "label": "21st",
+              "label": "48th",
               "type": "token"
             },
             {
@@ -783,25 +815,11 @@
       "type": "element",
       "children": [
         {
-          "label": "Per capita",
+          "label": "estimate",
           "type": "attribute",
           "children": [
             {
-              "label": "(",
-              "type": "token"
-            },
-            {
-              "label": ")",
-              "type": "token"
-            }
-          ]
-        },
-        {
-          "label": "2019 estimate",
-          "type": "attribute",
-          "children": [
-            {
-              "label": "8,570,146",
+              "label": "2018",
               "type": "token"
             },
             {
@@ -811,15 +829,11 @@
           ]
         },
         {
-          "label": "Total",
+          "label": "Per capita",
           "type": "attribute",
           "children": [
             {
-              "label": "207/km",
-              "type": "token"
-            },
-            {
-              "label": "$91",
+              "label": "$64,649",
               "type": "token"
             },
             {
@@ -827,15 +841,21 @@
               "type": "token"
             },
             {
-              "label": "38th",
+              "label": "9th",
               "type": "token"
             },
             {
               "label": ")",
               "type": "token"
-            },
+            }
+          ]
+        },
+        {
+          "label": "Total",
+          "type": "attribute",
+          "children": [
             {
-              "label": "(536.1/sq",
+              "label": "$548",
               "type": "token"
             },
             {
@@ -869,19 +889,7 @@
           "type": "attribute",
           "children": [
             {
-              "label": "$82,950",
-              "type": "token"
-            },
-            {
-              "label": "(",
-              "type": "token"
-            },
-            {
-              "label": "2nd",
-              "type": "token"
-            },
-            {
-              "label": "$64,649",
+              "label": ")",
               "type": "token"
             }
           ]
@@ -891,7 +899,7 @@
           "type": "attribute",
           "children": [
             {
-              "label": "$548",
+              "label": "$704",
               "type": "token"
             },
             {
@@ -903,7 +911,7 @@
               "type": "token"
             },
             {
-              "label": "82nd",
+              "label": "20th",
               "type": "token"
             },
             {
