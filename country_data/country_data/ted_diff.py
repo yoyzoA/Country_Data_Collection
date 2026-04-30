@@ -2,6 +2,7 @@ import json
 from typing import Any, Dict, List, Tuple
 
 from .tree_builder import TreeNode
+from .semantic_similarity import semantic_update_cost
 
 
 # 1) Rebuild TreeNode objects from the JSON tree dictionaries
@@ -50,16 +51,19 @@ def flatten_tree_preorder(root: TreeNode) -> List[Dict[str, Any]]:
     Chawathe-style flattening: preorder traversal, producing a sequence of
     LD-like entries.
 
-    Each entry contains:
-      - label       : node label (key name, token value, etc.)
-      - node_type   : "root" | "element" | "attribute" | "token"
-      - depth       : tree depth (used only for the LD-pair, not matching)
-      - path        : tuple-path from root (used for patcher addressing)
-      - parent_path : path of the parent node (used for insert ops in the patcher)
-      - parent_label: label of the parent node (used in update_cost to prevent
-                      tokens from being matched across different attribute parents)
-      - position    : child index under the parent (used for insert ops)
-      - subtree     : full subtree dict snapshot (used for insert/delete ops)
+    Each entry contains the usual LD-pair information plus additional semantic
+    context used by semantic_similarity.py:
+      - label / node_type / depth
+      - path / parent_path / parent_label / position
+      - ancestor_labels  : labels of the structural ancestors, excluding root
+      - parent_context   : full field/subsection context of the parent
+      - semantic_context : full field/subsection context of this node
+      - parent_value     : full text value of the parent when this is a token
+      - subtree          : full subtree snapshot for insert/delete/patching
+
+    The context fields are important for nested sections. For example, the
+    attribute "Total" under "Area" is not treated as the same field as "Total"
+    under "GDP (PPP)", even though the local label is identical.
     """
     seq: List[Dict[str, Any]] = []
 
@@ -70,8 +74,16 @@ def flatten_tree_preorder(root: TreeNode) -> List[Dict[str, Any]]:
         parent_path: Tuple[int, ...] | None,
         position: int | None,
         parent_label: str | None,
+        ancestor_labels: List[str],
+        parent_value: str = "",
     ):
-        seq.append({
+        # For token nodes, ancestor_labels already includes the attribute/field
+        # holding the token. For structural nodes, include the node's own label.
+        semantic_context_parts = list(ancestor_labels)
+        if node.node_type != "token" and node.node_type != "root":
+            semantic_context_parts.append(str(node.label))
+
+        entry = {
             "label": node.label,
             "node_type": node.node_type,
             "depth": depth,
@@ -79,74 +91,82 @@ def flatten_tree_preorder(root: TreeNode) -> List[Dict[str, Any]]:
             "parent_path": list(parent_path) if parent_path is not None else None,
             "parent_label": parent_label,
             "position": position,
+            "ancestor_labels": list(ancestor_labels),
+            "parent_context": " / ".join(ancestor_labels),
+            "semantic_context": " / ".join(semantic_context_parts),
+            "parent_value": parent_value,
             "subtree": subtree_to_dict(node),
-        })
-        for i, child in enumerate(node.children):
-            visit(child, depth + 1, path + (i,), path, i, parent_label=node.label)
+        }
+        seq.append(entry)
 
-    visit(root, depth=0, path=(), parent_path=None, position=None, parent_label=None)
+        # If this node has token children, their combined text is useful for
+        # interpreting split numeric values such as "5.36" + "million".
+        node_value_text = " ".join(
+            str(child.label) for child in node.children if child.node_type == "token"
+        )
+
+        for i, child in enumerate(node.children):
+            child_ancestors = list(ancestor_labels)
+            if node.node_type != "root":
+                child_ancestors.append(str(node.label))
+            visit(
+                child,
+                depth + 1,
+                path + (i,),
+                path,
+                i,
+                parent_label=node.label,
+                ancestor_labels=child_ancestors,
+                parent_value=node_value_text,
+            )
+
+    visit(
+        root,
+        depth=0,
+        path=(),
+        parent_path=None,
+        position=None,
+        parent_label=None,
+        ancestor_labels=[],
+    )
     return seq
 
-
 # 3) Edit operation costs
-def insert_cost(_: Dict[str, Any]) -> int:
-    return 1
+def insert_cost(_: Dict[str, Any]) -> float:
+    return 1.0
 
 
-def delete_cost(_: Dict[str, Any]) -> int:
-    return 1
+def delete_cost(_: Dict[str, Any]) -> float:
+    return 1.0
 
 
-def update_cost(a: Dict[str, Any], b: Dict[str, Any]) -> int:
+def update_cost(a: Dict[str, Any], b: Dict[str, Any]) -> float:
     """
     Cost of aligning node a (from T1) with node b (from T2).
 
-      0  – exact match: same label AND same node_type (and, for tokens,
-           same parent attribute label)
-      1  – same-type relabel: node_type matches, labels differ (and, for
-           tokens, same parent attribute label)
-      2  – cross-type: node_type differs (attribute vs token, etc.)
-           OR same-type token whose parent attribute labels differ
+    The old implementation used a binary content cost: exact token match = 0,
+    any other same-type token update = 1.  That made values like 1943→1946
+    cost the same as 1943→1776, and 4 million→6 million cost the same as
+    4 million→100 million.
 
-    Cross-type cost is set to 2 so that it equals the cost of a separate
-    delete + insert pair (1 + 1 = 2).  The backtracker is ordered to prefer
-    delete/insert over a cross-type diagonal step when both have equal cost,
-    which eliminates structurally nonsensical matches such as an attribute
-    node being aligned against a token node.
+    This version delegates to semantic_similarity.semantic_update_cost(), which
+    keeps the structural constraints of the original code but returns graded
+    costs for meaningful same-type updates:
 
-    The cross-parent-label cost for tokens prevents token "borrowing" across
-    attribute boundaries.  For example, a token under the "Currency" attribute
-    in T1 should never be aligned with a token under the "Capital" attribute
-    in T2; assigning cost 2 to such a match makes the DP prefer a separate
-    delete + insert instead.  This constraint applies to BOTH relabels AND
-    exact-label matches: a "(" token under "Area" must not be matched at cost
-    0 to a "(" token under "Currency", as that would prevent the Currency "("
-    from being emitted as an INSERT.
+      0      exact match
+      0..1   semantic update cost for compatible same-type nodes
+      2      incompatible/cross-type update, so delete + insert is preferred
 
-    Depth is intentionally excluded from the cost (see original note): two
-    nodes with the same label and type are considered a valid match regardless
-    of their depth in the tree.
+    Depth is intentionally excluded from the cost, as in the original code.
     """
-    if a["node_type"] != b["node_type"]:
-        return 2  # cross-type: never preferred over delete + insert
-    # Same node type.
-    # For tokens, apply parent-label constraint BEFORE the exact-match check
-    # so that cross-attribute tokens are never matched at cost 0.
-    if a["node_type"] == "token":
-        pa = a.get("parent_label")
-        pb = b.get("parent_label")
-        if pa is not None and pb is not None and pa != pb:
-            return 2  # cross-parent token: prefer delete + insert
-    if a["label"] == b["label"]:
-        return 0  # exact match
-    return 1  # same-type relabel
+    return semantic_update_cost(a, b)
 
 
 # 4) Dynamic-programming TED over preorder LD-pair sequences
 def compute_ted(
     seq_a: List[Dict[str, Any]],
     seq_b: List[Dict[str, Any]],
-) -> Tuple[List[List[int]], int]:
+) -> Tuple[List[List[float]], float]:
     """
     Compute edit distance between two preorder LD-pair sequences using the
     standard sequence-alignment DP over preorder node sequences, 
@@ -157,7 +177,7 @@ def compute_ted(
         ted   – the final tree edit distance value
     """
     n, m = len(seq_a), len(seq_b)
-    dist = [[0] * (m + 1) for _ in range(n + 1)]
+    dist = [[0.0] * (m + 1) for _ in range(n + 1)]
 
     for i in range(1, n + 1):
         dist[i][0] = dist[i - 1][0] + delete_cost(seq_a[i - 1])
@@ -175,10 +195,14 @@ def compute_ted(
 
 
 # 5) Backtracking to recover the edit script
+def _close(x: float, y: float, eps: float = 1e-9) -> bool:
+    return abs(x - y) <= eps
+
+
 def backtrack_edit_script(
     seq_a: List[Dict[str, Any]],
     seq_b: List[Dict[str, Any]],
-    dist: List[List[int]],
+    dist: List[List[float]],
 ) -> List[Dict[str, Any]]:
     """
     Recover one minimum-cost edit script by backtracking the DP matrix.
@@ -211,7 +235,7 @@ def backtrack_edit_script(
         # ── 1. Same-type diagonal (match / same-type update) ───────────────
         if i > 0 and j > 0:
             upd_c = update_cost(seq_a[i - 1], seq_b[j - 1])
-            if upd_c <= 1 and dist[i][j] == dist[i - 1][j - 1] + upd_c:
+            if upd_c <= 1 and _close(dist[i][j], dist[i - 1][j - 1] + upd_c):
                 if upd_c == 0:
                     raw_ops.append({
                         "op": "match",
@@ -231,13 +255,14 @@ def backtrack_edit_script(
                         "to_type": seq_b[j - 1]["node_type"],
                         "from_depth": seq_a[i - 1]["depth"],
                         "to_depth": seq_b[j - 1]["depth"],
+                        "update_cost": round(upd_c, 6),
                     })
                 i -= 1
                 j -= 1
                 continue
 
         # ── 2. Delete from T1 ──────────────────────────────────────────────
-        if i > 0 and dist[i][j] == dist[i - 1][j] + delete_cost(seq_a[i - 1]):
+        if i > 0 and _close(dist[i][j], dist[i - 1][j] + delete_cost(seq_a[i - 1])):
             raw_ops.append({
                 "op": "delete",
                 "source_path": seq_a[i - 1]["path"],
@@ -250,7 +275,7 @@ def backtrack_edit_script(
             continue
 
         # ── 3. Insert from T2 ──────────────────────────────────────────────
-        if j > 0 and dist[i][j] == dist[i][j - 1] + insert_cost(seq_b[j - 1]):
+        if j > 0 and _close(dist[i][j], dist[i][j - 1] + insert_cost(seq_b[j - 1])):
             raw_ops.append({
                 "op": "insert",
                 "target_path": seq_b[j - 1]["path"],
@@ -267,7 +292,7 @@ def backtrack_edit_script(
         # ── 4. Cross-type diagonal (fallback — should not occur) ───────────
         if i > 0 and j > 0:
             upd_c = update_cost(seq_a[i - 1], seq_b[j - 1])
-            if dist[i][j] == dist[i - 1][j - 1] + upd_c:
+            if _close(dist[i][j], dist[i - 1][j - 1] + upd_c):
                 raw_ops.append({
                     "op": "update",
                     "source_path": seq_a[i - 1]["path"],
@@ -278,6 +303,7 @@ def backtrack_edit_script(
                     "to_type": seq_b[j - 1]["node_type"],
                     "from_depth": seq_a[i - 1]["depth"],
                     "to_depth": seq_b[j - 1]["depth"],
+                    "update_cost": round(upd_c, 6),
                 })
                 i -= 1
                 j -= 1
@@ -292,7 +318,7 @@ def backtrack_edit_script(
 
 
 # 6) Similarity computation + high-level wrappers
-def similarity_from_ted(ted: int, len_a: int, len_b: int) -> float:
+def similarity_from_ted(ted: float, len_a: int, len_b: int) -> float:
     """
     Normalised similarity in [0, 1]:
         sim = 1 - TED / (|T1| + |T2|)
@@ -413,6 +439,51 @@ def _fix_doomed_updates(
     return pass2
 
 
+def _has_proper_ancestor(path: Tuple[int, ...], ancestor_paths: set[Tuple[int, ...]]) -> bool:
+    """True if any proper prefix of *path* is in *ancestor_paths*."""
+    return any(path[:k] in ancestor_paths for k in range(1, len(path)))
+
+
+def _collapse_subtree_operations(edit_script: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Simplify the recovered edit script using subtree operations.
+
+    Insert/delete operations store full subtree snapshots. Therefore, if the
+    script already contains INSERT for path [8], separate INSERT operations for
+    [8, 0], [8, 1], ... are redundant and can duplicate content during patching
+    or confuse the printed diff. The same applies to DELETE: deleting a parent
+    already deletes all descendants.
+
+    This follows the lecture's final-script idea: after recovering the raw edit
+    path, remove useless operations and represent whole-subtree changes with
+    InsTree/DelTree-style operations whenever possible.
+    """
+    insert_paths = {
+        tuple(op.get("target_path") or [])
+        for op in edit_script
+        if op.get("op") == "insert"
+    }
+    delete_paths = {
+        tuple(op.get("source_path") or [])
+        for op in edit_script
+        if op.get("op") == "delete"
+    }
+
+    collapsed: List[Dict[str, Any]] = []
+    for op in edit_script:
+        if op.get("op") == "insert":
+            path = tuple(op.get("target_path") or [])
+            if _has_proper_ancestor(path, insert_paths):
+                continue
+        elif op.get("op") == "delete":
+            path = tuple(op.get("source_path") or [])
+            if _has_proper_ancestor(path, delete_paths):
+                continue
+        collapsed.append(op)
+
+    return collapsed
+
+
 def compare_trees(tree_a: TreeNode, tree_b: TreeNode) -> Dict[str, Any]:
     """
     Full Section 4.3 pipeline:
@@ -429,6 +500,7 @@ def compare_trees(tree_a: TreeNode, tree_b: TreeNode) -> Dict[str, Any]:
     dist, ted_value = compute_ted(seq_a, seq_b)
     edit_script = backtrack_edit_script(seq_a, seq_b, dist)
     edit_script = _fix_doomed_updates(edit_script, seq_b)
+    edit_script = _collapse_subtree_operations(edit_script)
     similarity = similarity_from_ted(ted_value, len(seq_a), len(seq_b))
 
     return {

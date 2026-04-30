@@ -9,7 +9,7 @@ def main():
 
     # CHANGE THESE TWO COUNTRY NAMES TO TEST DIFFERENT PAIRS
     country_a = "Lebanon"
-    country_b = "Switzerland"
+    country_b = "Syria"
 
     result = compare_countries(json_path, country_a, country_b)
 
